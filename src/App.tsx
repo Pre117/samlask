@@ -1,12 +1,19 @@
 import React from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import routeConfig from "./routeConfig";
 
 const App = () => {
-
-    return(
+    return (
         <div id="app">
-            我是app
+            <BrowserRouter>
+                <Switch>
+                    {routeConfig.map((route, index) => (
+                        <Route key={index} {...route} />
+                    ))}
+                </Switch>
+            </BrowserRouter>
         </div>
-    )
-}
+    );
+};
 
 export default App;
