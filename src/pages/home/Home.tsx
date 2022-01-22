@@ -9,7 +9,8 @@ const Home = () => {
     return (
         <div id="home">
             <Header />
-            <div className="bg-gray-50 divide-y divide-gray-400">
+            <div className='h-12'></div>
+            <div className="">
                 {arr.map((item, index) => (
                     <BlogItem key={index} index={index} />
                 ))}
