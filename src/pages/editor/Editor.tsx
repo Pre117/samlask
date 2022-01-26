@@ -1,11 +1,11 @@
 import React from 'react'
-import Footer from '../../component/Footer'
+import Header from '../../component/Header'
 
 const Editor = () => {
     return (
         <div id="editor">
+            <Header />
             我是editor
-            <Footer />
         </div>
     )
 }

@@ -1,11 +1,11 @@
-import React from "react";
-import Footer from "../../component/Footer";
+import Header from "../../component/Header";
+import Pop from '../../component/Pop'
 
 const Profile = () => {
     return(
         <div>
+            <Header />
             我是个人主页
-            <Footer />
         </div>
     )
 }

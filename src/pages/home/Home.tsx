@@ -48,7 +48,6 @@ const Home = () => {
     return (
         <div id="home">
             <Header />
-            <div className="h-12"></div>
             <div className="">
                 {blogList.map((item, index) => (
                     <BlogItem
