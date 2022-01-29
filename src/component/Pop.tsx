@@ -1,7 +1,12 @@
 import React, { useState } from 'react'
 import { nAxios } from '../http/index'
 
-const Pop = (props: { isShow: boolean; scrollTop: number; onCancel: () => void; setLogin: () => void }) => {
+const Pop = (props: {
+    isShow: boolean
+    scrollTop: number
+    onCancel: () => void
+    setLogin: () => void
+}) => {
     const [phoneNumber, setPhoneNumber] = useState('')
     const [password, setPassword] = useState('')
 
@@ -44,10 +49,7 @@ const Pop = (props: { isShow: boolean; scrollTop: number; onCancel: () => void; 
             style={{ display: isShow ? 'block' : 'none', top: `${scrollTop}px` }}
         >
             {/* 遮罩 */}
-            <div
-                onClick={() => console.log('点击遮罩')}
-                className="w-full h-full bg-black bg-opacity-25"
-            />
+            <div className="w-full h-full bg-black bg-opacity-25" />
             {/* 弹窗 */}
             <div className="absolute top-1/2 left-1/2 w-80 h-72 -ml-40 -mt-36 p-7 bg-white flex flex-col items-center">
                 <div className="w-64 mb-8 flex justify-between">

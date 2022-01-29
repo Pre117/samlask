@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { io } from 'socket.io-client'
 
-const arr = new Array(50).fill('test')
+const BOTTOM_SCROLL_TOP = 1000000
 
-const ChatRoom = (props: { isShow: boolean; onReturn: () => void }) => {
-    const { isShow, onReturn } = props
+const arr = new Array(100).fill('test')
 
+const ChatRoom = (props: { isShow: boolean; onCancelChatRoom: () => void }) => {
+    const { isShow, onCancelChatRoom } = props
     const [message, setMessage] = useState('')
 
     // const socket = io('http://localhost:9000/')
@@ -19,25 +20,18 @@ const ChatRoom = (props: { isShow: boolean; onReturn: () => void }) => {
     //     console.log('transport message: ', msg)
     // })
 
-    const onSendMessage = () => {
-        console.log(document.documentElement.scrollTop)
+    const onReturn = () => {
+        // 退回到滚动条底部
+        document.querySelector('#chatMessageList')?.scrollTo(0, BOTTOM_SCROLL_TOP)
+        onCancelChatRoom()
     }
 
-    useEffect(() => {
-        const sheight = document.documentElement.scrollTop
-        // const cheight = screen.availHeight
-        console.log(sheight)
-        // console.log(cheight)
-        if (isShow) {
-            window.scrollTo(0, 468)
-            console.log(sheight)
-        }
-    }, [isShow])
+    const onSendMessage = () => {}
 
     return (
         <div
             style={{ width: isShow ? '100%' : 0 }}
-            className="min-h-full absolute top-0 right-0 overflow-hidden transition-width ease-in-out duration-500"
+            className="h-full fixed right-0 top-0 overflow-hidden transition-width ease-in-out duration-500"
         >
             <div className="w-full h-14 fixed top-0 bg-white flex justify-between items-center text-center shadow">
                 <div className="w-16" onClick={onReturn}>
@@ -46,13 +40,15 @@ const ChatRoom = (props: { isShow: boolean; onReturn: () => void }) => {
                 <div className="w-20">猫不理饺子</div>
                 <div className="w-16">设置</div>
             </div>
-            <div className="w-full h-14">上面没有了...</div>
-            <div id='chatMessageList' className="w-full bg-gray-100">
+            <div className="h-14"></div>
+            <div id="chatMessageList" className="w-full h-chatRoom bg-gray-100 overflow-scroll">
                 {arr.map((item: any, index: number) => (
-                    <li key={index}>{item}</li>
+                    <div key={index} className="h-8 border text-center">
+                        {item}, {index}
+                    </div>
                 ))}
             </div>
-            <div className="w-full h-14">下面没有了...</div>
+            <div className="h-14"></div>
             <div className="w-full h-14 py-2 pl-3 bg-white fixed bottom-0 text-sm shadow">
                 <input
                     type="text"

@@ -7,20 +7,15 @@ import avatar from './getAvatar.jpg'
 
 const Message = () => {
     const [isShow, setIsShow] = useState(false)
-    const [scrollTop, setScrollTop] = useState(0)
 
     const onShowChatRoom = () => {
         setIsShow(true)
-        // console.log(document.documentElement.scrollTop)
-        setScrollTop(document.documentElement.scrollTop)
-        // bodyOverflowHidden()
+        bodyOverflowHidden()
     }
 
     const onCancelChatRoom = () => {
         setIsShow(false)
-        document.documentElement.scrollTop = scrollTop
-        console.log(document.documentElement.scrollTop)
-        // bodyOverflowVisible()
+        bodyOverflowVisible()
     }
 
     const chatProps = {
@@ -34,12 +29,7 @@ const Message = () => {
     const arr = new Array(20).fill(chatProps)
 
     return (
-        <div
-            style={{
-                height: isShow ? '100vh' : 'auto',
-            }}
-            className="w-full bg-gray-100 overflow-hidden"
-        >
+        <div className="bg-gray-100">
             <Header />
             <div className="w-full h-20 flex justify-around items-center mb-2 bg-white">
                 <div>通知</div>
@@ -52,7 +42,7 @@ const Message = () => {
                     <ChatItem key={index} {...item} />
                 ))}
             </div>
-            <ChatRoom isShow={isShow} onReturn={onCancelChatRoom} />
+            <ChatRoom isShow={isShow} onCancelChatRoom={onCancelChatRoom} />
         </div>
     )
 }
