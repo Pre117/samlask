@@ -3,11 +3,12 @@ const ChatItem = (props: {
     imgUrl: string
     lastMessage: string
     date: string
+    onOpenChatRoom: () => void
 }) => {
-    const { username, imgUrl, lastMessage, date } = props
+    const { username, imgUrl, lastMessage, date, onOpenChatRoom } = props
 
     return (
-        <div className="w-full h-16 flex">
+        <div onClick={onOpenChatRoom} className="w-full h-16 flex">
             <div className="pl-2 flex justify-center items-center">
                 <img className="w-12 h-12 mr-1 rounded-full" src={imgUrl} />
             </div>

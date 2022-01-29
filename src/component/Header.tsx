@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import '../iconfont/NavButtonIcon.css'
-import { goToPage } from '../utils/common'
+import { bodyOverflowHidden, bodyOverflowVisible, goToPage } from '../utils/common'
 import Pop from './Pop'
 
 const Header = () => {
@@ -10,22 +10,20 @@ const Header = () => {
     const [scrollTop, setScrollTop] = useState(0)
     const history = useHistory()
 
-    const body = document.getElementsByTagName('body')[0]
-
     // 打开弹窗
     const onPop = () => {
         // 获取当前窗口距文档顶部的距离
         setScrollTop(document.documentElement.scrollTop)
         setShowPop(true)
         // 将溢出内容隐藏来阻止弹窗出行时的页面滚动
-        body.style.overflow = 'hidden'
+        bodyOverflowHidden()
     }
 
     // 关闭弹窗，传给子组件Pop
     const onCancel = useCallback(() => {
         setShowPop(false)
         // 恢复默认值
-        body.style.overflow = 'visible'
+        bodyOverflowVisible()
     }, [])
 
     // 确认登录状态，传给子组件Pop
