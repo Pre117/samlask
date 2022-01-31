@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { nAxios } from '../http/index'
+import { nAxios } from '../network/index'
 
 const Pop = (props: {
     isShow: boolean
