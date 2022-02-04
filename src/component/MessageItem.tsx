@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 const MessageItem = (props: { userId: string; avatar: string; message: string; date: string }) => {
     const { userId, avatar, message, date } = props
 
-    const isOwner = useMemo(() => userId === '222', [userId])
+    const isOwner = useMemo(() => userId === localStorage.getItem('userId'), [userId])
 
     return (
         <div className={`my-5 flex ${isOwner ? 'flex-row-reverse' : 'flex-row'} items-center`}>

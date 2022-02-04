@@ -16,7 +16,7 @@ const recordList = [
         date: moment().format('YYYY-MMM-Do h:mm'),
     },
     {
-        userId: '222',
+        userId: '61fd3ffe8fb2cd110f7bceee',
         avatar: avatar2,
         message: '还请多多关注支持，这是一个悲伤的事情，哈哈哈哈溜了溜了',
         date: moment().format('YYYY-MMM-Do h:mm'),
@@ -28,7 +28,7 @@ const recordList = [
         date: moment().format('YYYY-MMM-Do h:mm'),
     },
     {
-        userId: '222',
+        userId: '61fd3ffe8fb2cd110f7bceee',
         avatar: avatar2,
         message: '还请多多关注支持，这是一个悲伤的事情，哈哈哈哈溜了溜了',
         date: moment().format('YYYY-MMM-Do h:mm'),
@@ -40,7 +40,7 @@ const recordList = [
         date: moment().format('YYYY-MMM-Do h:mm'),
     },
     {
-        userId: '222',
+        userId: '61fd3ffe8fb2cd110f7bceee',
         avatar: avatar2,
         message: '还请多多关注支持！！',
         date: moment().format('YYYY-MMM-Do h:mm'),
@@ -52,7 +52,7 @@ const recordList = [
         date: moment().format('YYYY-MMM-Do h:mm'),
     },
     {
-        userId: '222',
+        userId: '61fd3ffe8fb2cd110f7bceee',
         avatar: avatar2,
         message: '还请多多关注支持！！',
         date: moment().format('YYYY-MMM-Do h:mm'),
@@ -64,7 +64,7 @@ const recordList = [
         date: moment().format('YYYY-MMM-Do h:mm'),
     },
     {
-        userId: '222',
+        userId: '61fd3ffe8fb2cd110f7bceee',
         avatar: avatar2,
         message: '还请多多关注支持！！',
         date: moment().format('YYYY-MMM-Do h:mm'),
@@ -76,7 +76,7 @@ const recordList = [
         date: moment().format('YYYY-MMM-Do h:mm'),
     },
     {
-        userId: '222',
+        userId: '61fd3ffe8fb2cd110f7bceee',
         avatar: avatar2,
         message: '还请多多关注支持，这是一个悲伤的事情，哈哈哈哈溜了溜了',
         date: moment().format('YYYY-MMM-Do h:mm'),
@@ -88,7 +88,7 @@ const recordList = [
         date: moment().format('YYYY-MMM-Do h:mm'),
     },
     {
-        userId: '222',
+        userId: '61fd3ffe8fb2cd110f7bceee',
         avatar: avatar2,
         message: '还请多多关注支持，这是一个悲伤的事情，哈哈哈哈溜了溜了',
         date: moment().format('YYYY-MMM-Do h:mm'),

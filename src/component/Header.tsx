@@ -45,26 +45,23 @@ const Header = () => {
                     className="w-24 h-8 ml-20 pl-3 py-1 text-sm bg-gray-100 rounded-l"
                 />
                 <div className="iconfont icon-sousuo w-8 h-8 mr-5 text-sm text-center leading-8 bg-gray-100 rounded-r" />
-                {isLogin && (
-                    <div
-                        onClick={() => goToPage('/message', history)}
-                        className="iconfont icon-xiaoxi mr-6"
-                    />
-                )}
-                {isLogin && (
-                    <div
-                        onClick={() => setShowDropMenu(showDropMenu ? false : true)}
-                        className="iconfont icon-wode mr-4 w-8 h-8 border rounded-full text-center bg-gray-300"
-                    />
-                )}
-                {!isLogin && (
-                    <div
-                        onClick={onPop}
-                        className="w-16 h-8 mr-5 bg-green-500 text-white text-sm text-center leading-8 rounded"
-                    >
-                        登录
-                    </div>
-                )}
+                <div
+                    style={{ display: isLogin ? 'block' : 'none' }}
+                    onClick={() => goToPage('/message', history)}
+                    className="iconfont icon-xiaoxi mr-6"
+                />
+                <div
+                    style={{ display: isLogin ? 'block' : 'none' }}
+                    onClick={() => setShowDropMenu(showDropMenu ? false : true)}
+                    className="iconfont icon-wode mr-4 w-8 h-8 border rounded-full text-center bg-gray-300"
+                />
+                <div
+                    style={{ display: isLogin ? 'none' : 'block' }}
+                    onClick={onPop}
+                    className="w-16 h-8 mr-5 bg-green-500 text-white text-sm text-center leading-8 rounded"
+                >
+                    登录
+                </div>
                 <DropDownMenu showDropMenu={showDropMenu} />
             </div>
             <div className="h-14"></div>
