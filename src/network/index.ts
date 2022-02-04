@@ -1,6 +1,8 @@
 import axios from 'axios'
 
-// 普通封装请求，不需要携带token也能访问的请求
+/**
+ * 普通封装请求，不需要携带token也能访问的请求
+ */
 export const nAxios = axios.create({
     baseURL: 'http://localhost:9000/',
     timeout: 2000,

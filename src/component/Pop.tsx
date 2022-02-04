@@ -25,6 +25,7 @@ const Pop = (props: {
 
             if (data.code === 0) {
                 localStorage.setItem('token', data.token)
+                localStorage.setItem('userId', data.userId)
                 setLogin()
             } else if (data.code === 1 || data.code === 2) {
                 console.log(data.message)
