@@ -3,9 +3,11 @@ import { useHistory } from 'react-router-dom'
 import '../iconfont/NavButtonIcon.css'
 import { bodyOverflowHidden, bodyOverflowVisible, goToPage } from '../utils/common'
 import Pop from './Pop'
+import DropDownMenu from './DropDownMenu'
 
 const Header = () => {
     const [showPop, setShowPop] = useState(false)
+    const [showDropMenu, setShowDropMenu] = useState(false)
     const [isLogin, setIsLogin] = useState(localStorage.getItem('token') ? true : false)
     const [scrollTop, setScrollTop] = useState(0)
     const history = useHistory()
@@ -51,7 +53,7 @@ const Header = () => {
                 )}
                 {isLogin && (
                     <div
-                        onClick={() => goToPage('/profile', history)}
+                        onClick={() => setShowDropMenu(showDropMenu ? false : true)}
                         className="iconfont icon-wode mr-4 w-8 h-8 border rounded-full text-center bg-gray-300"
                     />
                 )}
@@ -63,6 +65,7 @@ const Header = () => {
                         登录
                     </div>
                 )}
+                <DropDownMenu showDropMenu={showDropMenu} />
             </div>
             <div className="h-14"></div>
             <Pop isShow={showPop} scrollTop={scrollTop} onCancel={onCancel} setLogin={setLogin} />
