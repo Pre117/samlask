@@ -1,120 +1,54 @@
-import moment from 'moment'
 import { useCallback, useEffect, useState } from 'react'
 import MessageItem from '../../component/MessageItem'
 import socket from '../../network/socket'
 import { debounce } from '../../utils/common'
-import avatar1 from './avatar1.webp'
-import avatar2 from './avatar2.webp'
+import { fetchRecordList } from '../../network/message'
+import { fetchUserInfo } from '../../network/user'
+import { IUserInfo } from '../../model/user'
+import { IMessage } from '../../model/message'
 
 const BOTTOM_SCROLL_TOP = 1000000
 
-const recordList = [
+const initMessageRecord: IMessage[] = [
     {
-        userId: '123',
-        avatar: avatar1,
-        message: '还请多多关注支持！！',
-        date: moment().format('YYYY-MMM-Do h:mm'),
-    },
-    {
-        userId: '61fd3ffe8fb2cd110f7bceee',
-        avatar: avatar2,
-        message: '还请多多关注支持，这是一个悲伤的事情，哈哈哈哈溜了溜了',
-        date: moment().format('YYYY-MMM-Do h:mm'),
-    },
-    {
-        userId: '123',
-        avatar: avatar1,
-        message: '还请多多关注支持！！',
-        date: moment().format('YYYY-MMM-Do h:mm'),
-    },
-    {
-        userId: '61fd3ffe8fb2cd110f7bceee',
-        avatar: avatar2,
-        message: '还请多多关注支持，这是一个悲伤的事情，哈哈哈哈溜了溜了',
-        date: moment().format('YYYY-MMM-Do h:mm'),
-    },
-    {
-        userId: '123',
-        avatar: avatar1,
-        message: '还请多多关注支持！！',
-        date: moment().format('YYYY-MMM-Do h:mm'),
-    },
-    {
-        userId: '61fd3ffe8fb2cd110f7bceee',
-        avatar: avatar2,
-        message: '还请多多关注支持！！',
-        date: moment().format('YYYY-MMM-Do h:mm'),
-    },
-    {
-        userId: '123',
-        avatar: avatar1,
-        message: '还请多多关注支持！！',
-        date: moment().format('YYYY-MMM-Do h:mm'),
-    },
-    {
-        userId: '61fd3ffe8fb2cd110f7bceee',
-        avatar: avatar2,
-        message: '还请多多关注支持！！',
-        date: moment().format('YYYY-MMM-Do h:mm'),
-    },
-    {
-        userId: '123',
-        avatar: avatar1,
-        message: '还请多多关注支持！！',
-        date: moment().format('YYYY-MMM-Do h:mm'),
-    },
-    {
-        userId: '61fd3ffe8fb2cd110f7bceee',
-        avatar: avatar2,
-        message: '还请多多关注支持！！',
-        date: moment().format('YYYY-MMM-Do h:mm'),
-    },
-    {
-        userId: '123',
-        avatar: avatar1,
-        message: '还请多多关注支持！！',
-        date: moment().format('YYYY-MMM-Do h:mm'),
-    },
-    {
-        userId: '61fd3ffe8fb2cd110f7bceee',
-        avatar: avatar2,
-        message: '还请多多关注支持，这是一个悲伤的事情，哈哈哈哈溜了溜了',
-        date: moment().format('YYYY-MMM-Do h:mm'),
-    },
-    {
-        userId: '123',
-        avatar: avatar1,
-        message: '还请多多关注支持！！',
-        date: moment().format('YYYY-MMM-Do h:mm'),
-    },
-    {
-        userId: '61fd3ffe8fb2cd110f7bceee',
-        avatar: avatar2,
-        message: '还请多多关注支持，这是一个悲伤的事情，哈哈哈哈溜了溜了',
-        date: moment().format('YYYY-MMM-Do h:mm'),
-    },
+        userId: '',
+        message: '',
+        date: ''
+    }
 ]
 
-const ChatRoom = (props: { isShow: boolean; onCancelChatRoom: () => void }) => {
-    const { isShow, onCancelChatRoom } = props
+const initUserInfo: IUserInfo = {
+    userId: '',
+    username: '',
+    avatar: '',
+    points: ''
+}
+
+const ChatRoom = (props: {
+    isShow: boolean
+    contactUserId: string
+    onCancelChatRoom: () => void
+}) => {
+    const { isShow, contactUserId, onCancelChatRoom } = props
     const [message, setMessage] = useState('')
-    const [chatList, setChatList] = useState(recordList)
-    console.log('我被执行了')
+    const [recordList, setRecordList] = useState<IMessage[]>(initMessageRecord)
+    const [userInfo, setUserInfo] = useState<IUserInfo>(initUserInfo)
+    const userId = localStorage.getItem('userId')
 
     const onChangeMessage = (event: any) => setMessage(event.target.value)
 
     const onSendMessage = () => {
-        console.log('message: ', message)
-        const tempList = chatList
-        tempList.push({
-            userId: '222',
-            avatar: avatar2,
-            message,
-            date: moment().format(),
-        })
-        setChatList(tempList)
-        console.log(chatList)
-        socket.emit('chat message', message)
+        // console.log('message: ', message)
+        // const tempList = chatList
+        // tempList.push({
+        //     userId: '222',
+        //     avatar: avatar2,
+        //     message,
+        //     date: moment().format(),
+        // })
+        // setChatList(tempList)
+        // console.log(chatList)
+        // socket.emit('chat message', message)
         backToBottom()
     }
 
@@ -135,6 +69,38 @@ const ChatRoom = (props: { isShow: boolean; onCancelChatRoom: () => void }) => {
         })
     }
 
+    const getRecordList = useCallback(async () => {
+        if (contactUserId !== '') {
+            const result = await fetchRecordList(userId as string, contactUserId)
+            console.log(result);
+            const userInfoA = await fetchUserInfo(userId as string)
+            const userInfoB = await fetchUserInfo(contactUserId)
+            setUserInfo(userInfoB)
+            const newList = result.messageRecord.map((item: any) => {
+                if (item.userId === userId) {
+                    return {
+                        avatar: userInfoA.avatar,
+                        messageInfo: item
+                    }
+                } else if (item.userId === contactUserId) {
+                    return {
+                        avatar: userInfoB.avatar,
+                        messageInfo: item
+                    }
+                }
+            })
+            console.log(newList)
+            setRecordList(newList)
+        }
+        
+    }, [contactUserId])
+
+    
+
+    useEffect(() => {
+        getRecordList()
+    }, [contactUserId])
+
     useEffect(() => {
         backToBottom()
     }, [])
@@ -152,17 +118,19 @@ const ChatRoom = (props: { isShow: boolean; onCancelChatRoom: () => void }) => {
                 <div className="w-16" onClick={onReturn}>
                     返回
                 </div>
-                <div className="w-20">猫不理饺子</div>
+                <div className="w-20">{userInfo.username}</div>
                 <div className="w-16">设置</div>
             </div>
             <div className="h-14"></div>
             <div id="chatMessageList" className="w-full h-chatRoom bg-gray-100 overflow-scroll">
-                {chatList.map((item: any, index: number) => (
+                {recordList.map((item: any, index: number) => (
                     <MessageItem key={index} {...item} />
                 ))}
             </div>
             <div className="h-14"></div>
-            <div className={`w-full min-h-14 h-${message.length} py-2 pl-3 bg-white fixed bottom-0 text-sm shadow`}>
+            <div
+                className={`w-full min-h-14 h-${message.length} py-2 pl-3 bg-white fixed bottom-0 text-sm shadow`}
+            >
                 <textarea
                     placeholder="请输入消息..."
                     className="w-3/4 h-10 mr-2 rounded p-2 bg-gray-50"

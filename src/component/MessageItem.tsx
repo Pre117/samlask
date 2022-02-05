@@ -1,9 +1,19 @@
 import { useMemo } from 'react'
+import { IMessage } from '../model/message'
 
-const MessageItem = (props: { userId: string; avatar: string; message: string; date: string }) => {
-    const { userId, avatar, message, date } = props
+const MessageItem = (props: {
+    messageInfo: IMessage,
+    avatar: string
+}) => {
+    const { messageInfo, avatar } = props
 
-    const isOwner = useMemo(() => userId === localStorage.getItem('userId'), [userId])
+    const isOwner = useMemo(() => {
+        if (messageInfo) {
+            return messageInfo.userId === localStorage.getItem('userId')
+        } else {
+            return false
+        }
+    }, [messageInfo])
 
     return (
         <div className={`my-5 flex ${isOwner ? 'flex-row-reverse' : 'flex-row'} items-center`}>
@@ -15,7 +25,7 @@ const MessageItem = (props: { userId: string; avatar: string; message: string; d
                     isOwner ? 'rounded-l-xl rounded-br-xl' : 'rounded-r-xl rounded-bl-xl'
                 } shadow-md bg-white`}
             >
-                {message}
+                {messageInfo && messageInfo.message}
             </div>
         </div>
     )
