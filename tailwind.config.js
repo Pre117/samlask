@@ -7,6 +7,9 @@ module.exports = {
       },
       height: {
         'chatRoom': 'calc(100% - 7rem)'
+      },
+      maxWidth: {
+        '3/5': '60%'
       }
     },
   },

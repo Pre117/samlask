@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import MessageItem from '../../component/MessageItem'
 import { IMessage, IMessageItem } from '../../model/message'
 import { IUserInfo } from '../../model/user'
@@ -71,7 +71,6 @@ const ChatRoom = (props: {
             message,
             date: '2022/2/6',
         })
-        backToBottom()
     }
 
     // 滚动到底部
@@ -137,6 +136,12 @@ const ChatRoom = (props: {
         }
     }, [contactUserId, avatarA, avatarB])
 
+    // 获取输入框的高度
+    const getTextRow = useMemo(() => {
+        const row = Math.ceil((message.length + 1) / 25) + (message.match(/\n/g)?.length || 0)
+        return row < 5 ? row : 5
+    }, [message])
+
     useEffect(() => {
         getAvatar()
     }, [contactUserId])
@@ -157,7 +162,7 @@ const ChatRoom = (props: {
 
     useEffect(() => {
         backToBottom()
-    }, [])
+    }, [recordList])
 
     useEffect(() => {
         onListener()
@@ -180,22 +185,24 @@ const ChatRoom = (props: {
                 <div className="w-16">设置</div>
             </div>
             <div className="h-14"></div>
-            <div id="chatMessageList" className="w-full h-chatRoom bg-gray-100 overflow-scroll">
+            <div id="chatMessageList" className="w-full h-chatRoom bg-gray-100 overflow-x-hidden overflow-y-scroll">
                 {recordList.map((item: any, index: number) => (
                     <MessageItem key={index} {...item} />
                 ))}
             </div>
             <div className="h-14"></div>
             <div
-                className={`w-full min-h-14 h-${message.length} py-2 pl-3 bg-white fixed bottom-0 text-sm shadow`}
+                className={`fixed bottom-0 w-full min-h-14 px-4 py-2 flex justify-around bg-white shadow`}
             >
                 <textarea
                     placeholder="请输入消息..."
-                    className="w-3/4 h-10 mr-2 rounded p-2 bg-gray-50"
+                    maxLength={120}
+                    rows={getTextRow}
+                    className='w-4/5 p-2 mr-4 resize-none border rounded'
                     value={message}
                     onChange={onChangeMessage}
                 />
-                <button onClick={onSendMessage} className="w-1/5 h-10 text-gray-400">
+                <button onClick={onSendMessage} className="w-1/5 h-10 mb-px self-end border rounded text-sm text-white bg-green-500">
                     发送
                 </button>
             </div>

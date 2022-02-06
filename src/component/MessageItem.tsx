@@ -16,14 +16,14 @@ const MessageItem = (props: {
     }, [messageInfo])
 
     return (
-        <div className={`my-5 flex ${isOwner ? 'flex-row-reverse' : 'flex-row'} items-center`}>
-            <div className="ml-4 mr-2 flex justify-center items-center">
+        <div className={`my-8 flex ${isOwner ? 'flex-row-reverse' : 'flex-row'}`}>
+            <div className={`${isOwner ? 'ml-4 mr-2' : 'ml-2 mr-4'} -translate-y-3 flex justify-center items-start`}>
                 <img className="w-12 h-12 rounded-full" src={avatar} />
             </div>
             <div
-                className={`w-1/2 p-2 border ${
+                className={`max-w-3/5 p-3 ${
                     isOwner ? 'rounded-l-xl rounded-br-xl' : 'rounded-r-xl rounded-bl-xl'
-                } shadow-md bg-white`}
+                } shadow-md bg-white break-all`}
             >
                 {messageInfo && messageInfo.message}
             </div>
