@@ -4,3 +4,8 @@ export interface IMessage {
     message: string,
     date: string
 }
+
+export interface IMessageItem {
+    avatar: string,
+    messageInfo: IMessage
+}

@@ -1,27 +1,35 @@
 import { useCallback, useEffect, useState } from 'react'
 import MessageItem from '../../component/MessageItem'
-import socket from '../../network/socket'
-import { debounce } from '../../utils/common'
-import { fetchRecordList } from '../../network/message'
-import { fetchUserInfo } from '../../network/user'
+import { IMessage, IMessageItem } from '../../model/message'
 import { IUserInfo } from '../../model/user'
-import { IMessage } from '../../model/message'
+import { fetchRecordList } from '../../network/message'
+import socket from '../../network/socket'
+import { fetchUserInfo } from '../../network/user'
 
 const BOTTOM_SCROLL_TOP = 1000000
 
-const initMessageRecord: IMessage[] = [
+const initReceiveMessage: IMessage = {
+    userId: '',
+    message: '',
+    date: ''
+}
+
+const initMessageRecord: IMessageItem[] = [
     {
-        userId: '',
-        message: '',
-        date: ''
-    }
+        avatar: '',
+        messageInfo: {
+            userId: '',
+            message: '',
+            date: '',
+        },
+    },
 ]
 
 const initUserInfo: IUserInfo = {
     userId: '',
     username: '',
     avatar: '',
-    points: ''
+    points: '',
 }
 
 const ChatRoom = (props: {
@@ -31,24 +39,38 @@ const ChatRoom = (props: {
 }) => {
     const { isShow, contactUserId, onCancelChatRoom } = props
     const [message, setMessage] = useState('')
-    const [recordList, setRecordList] = useState<IMessage[]>(initMessageRecord)
+    const [receiveMessage, setReceiveMessage] = useState<IMessage>(initReceiveMessage)
+    const [recordList, setRecordList] = useState<IMessageItem[]>(initMessageRecord)
     const [userInfo, setUserInfo] = useState<IUserInfo>(initUserInfo)
+    const [avatarA, setAvatarA] = useState('')
+    const [avatarB, setAvatarB] = useState('')
     const userId = localStorage.getItem('userId')
 
     const onChangeMessage = (event: any) => setMessage(event.target.value)
 
     const onSendMessage = () => {
-        // console.log('message: ', message)
-        // const tempList = chatList
-        // tempList.push({
-        //     userId: '222',
-        //     avatar: avatar2,
+        setRecordList([
+            ...recordList,
+            {
+                avatar: avatarA,
+                messageInfo: {
+                    userId: userId as string,
+                    message,
+                    date: '2022/2/6',
+                },
+            },
+        ])
+        setMessage('')
+        // socket.emit(`origin: ${userId}, destination: ${contactUserId}`, {
+        //     userId: userId as string,
         //     message,
-        //     date: moment().format(),
+        //     date: '2022/2/6',
         // })
-        // setChatList(tempList)
-        // console.log(chatList)
-        // socket.emit('chat message', message)
+        socket.emit('private message', userId, contactUserId, {
+            userId: userId as string,
+            message,
+            date: '2022/2/6',
+        })
         backToBottom()
     }
 
@@ -63,43 +85,75 @@ const ChatRoom = (props: {
         onCancelChatRoom()
     }
 
+    // 监听另一个用户发来的消息
     const onListener = () => {
-        socket.on('chat message', (msg: any) => {
-            console.log('transport message: ', msg)
-        })
+        if (contactUserId !== '') {
+            // socket.on(`origin: ${contactUserId}, destination: ${userId}`, (msg: any) => {
+            //     console.log(`transport ${contactUserId} message: `, msg)
+            //     if (userId !== msg.userId) {
+            //         setReceiveMessage(msg)
+            //     }
+            // })
+            socket.on('chat message', (msg: any) => {
+                console.log(`transport ${contactUserId} message: `, msg)
+                if (userId !== msg.userId) {
+                    setReceiveMessage(msg)
+                }
+            })
+        }
     }
 
-    const getRecordList = useCallback(async () => {
+    // 获取两个用户的头像、另一个用户的信息
+    const getAvatar = useCallback(async () => {
         if (contactUserId !== '') {
-            const result = await fetchRecordList(userId as string, contactUserId)
-            console.log(result);
             const userInfoA = await fetchUserInfo(userId as string)
             const userInfoB = await fetchUserInfo(contactUserId)
             setUserInfo(userInfoB)
+
+            setAvatarA(userInfoA.avatar)
+            setAvatarB(userInfoB.avatar)
+        }
+    }, [contactUserId])
+
+    // 获取两个用户的聊天纪录
+    const getRecordList = useCallback(async () => {
+        if (contactUserId && avatarA && avatarB) {
+            const result = await fetchRecordList(userId as string, contactUserId)
+
             const newList = result.messageRecord.map((item: any) => {
                 if (item.userId === userId) {
                     return {
-                        avatar: userInfoA.avatar,
-                        messageInfo: item
+                        avatar: avatarA,
+                        messageInfo: item,
                     }
                 } else if (item.userId === contactUserId) {
                     return {
-                        avatar: userInfoB.avatar,
-                        messageInfo: item
+                        avatar: avatarB,
+                        messageInfo: item,
                     }
                 }
             })
-            console.log(newList)
             setRecordList(newList)
         }
-        
-    }, [contactUserId])
+    }, [contactUserId, avatarA, avatarB])
 
-    
+    useEffect(() => {
+        getAvatar()
+    }, [contactUserId])
 
     useEffect(() => {
         getRecordList()
-    }, [contactUserId])
+    }, [contactUserId, avatarA, avatarB])
+
+    useEffect(() => {
+        setRecordList([
+            ...recordList,
+            {
+                avatar: avatarB,
+                messageInfo: receiveMessage
+            }
+        ])
+    }, [receiveMessage])
 
     useEffect(() => {
         backToBottom()
@@ -107,6 +161,10 @@ const ChatRoom = (props: {
 
     useEffect(() => {
         onListener()
+    }, [contactUserId])
+
+    useEffect(() => {
+        socket.emit('new user enter', userId)
     }, [])
 
     return (
@@ -134,8 +192,8 @@ const ChatRoom = (props: {
                 <textarea
                     placeholder="请输入消息..."
                     className="w-3/4 h-10 mr-2 rounded p-2 bg-gray-50"
-                    // value={message}
-                    // onChange={onChangeMessage}
+                    value={message}
+                    onChange={onChangeMessage}
                 />
                 <button onClick={onSendMessage} className="w-1/5 h-10 text-gray-400">
                     发送
