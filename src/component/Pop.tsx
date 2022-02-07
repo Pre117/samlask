@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { nAxios } from '../network/index'
+import { userLogin } from '../network/user'
 
 const Pop = (props: {
     isShow: boolean
@@ -16,10 +16,7 @@ const Pop = (props: {
         console.log(phoneNumber, password)
 
         try {
-            const { data } = await nAxios.post('/user/login', {
-                phoneNumber,
-                password,
-            })
+            const data = await userLogin(phoneNumber, password)
 
             console.log(data)
 

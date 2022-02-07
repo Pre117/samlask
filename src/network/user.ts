@@ -1,5 +1,11 @@
 import { nAxios } from './index'
 
+export const userLogin = async (phoneNumber: string, password: string) => {
+    const { data } = await nAxios.post('/user/login', { phoneNumber, password })
+
+    return data
+}
+
 /**
  * 获取用户信息
  * @param userId 用户Id

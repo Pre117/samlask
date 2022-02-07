@@ -20,7 +20,7 @@ const Message = () => {
     const [isShow, setIsShow] = useState(false)
     const [contactList, setContactList] = useState(initContactList)
     const [contactUserId, setContactUserId] = useState('')
-    const userId = localStorage.getItem('userId')
+    const userId = localStorage.getItem('userId') as string
 
     const onShowChatRoom = (userId: string) => {
         setIsShow(true)
@@ -34,7 +34,7 @@ const Message = () => {
     }
 
     const getContactList = useCallback(async () => {
-        const result = await fetchContactList(userId as string)
+        const result = await fetchContactList(userId)
         setContactList(result)
     }, [])
 

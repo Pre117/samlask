@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import Header from '../../component/Header'
 import { nAxios } from '../../network'
 import { IUserInfo } from '../../model/user'
+import { fetchUserInfo } from '../../network/user'
 
 const initUserInfo: IUserInfo = {
     userId: '',
@@ -14,10 +15,8 @@ const Profile = () => {
     const [userInfo, setUserInfo] = useState<IUserInfo>(initUserInfo)
 
     const getUserInfo = useCallback(async () => {
-        const userId = localStorage.getItem('userId')
-        const {
-            data: { result },
-        } = await nAxios.post('/user-info/find', { userId })
+        const userId = localStorage.getItem('userId') as string
+        const result = await fetchUserInfo(userId)
         setUserInfo({
             userId: result.userId,
             username: result.username,
