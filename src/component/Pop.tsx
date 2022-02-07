@@ -60,7 +60,8 @@ const Pop = (props: {
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     placeholder="手机号"
                     id="phoneNumber"
-                    className="w-64 h-9 mb-5 p-2 border text-sm"
+                    autoComplete='off'
+                    className="w-64 h-9 mb-5 p-2 border text-sm outline-none"
                 />
                 <input
                     type="password"
@@ -68,7 +69,7 @@ const Pop = (props: {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="密码"
                     id="password"
-                    className="w-64 h-9 mb-5 p-2 border text-sm"
+                    className="w-64 h-9 mb-5 p-2 border text-sm outline-none"
                 />
                 <button
                     className="w-64 h-9 bg-green-500 text-center text-white text-sm leading-9"

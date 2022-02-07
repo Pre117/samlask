@@ -2,8 +2,8 @@ import { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import '../iconfont/NavButtonIcon.css'
 import { bodyOverflowHidden, bodyOverflowVisible, goToPage } from '../utils/common'
-import Pop from './Pop'
 import DropDownMenu from './DropDownMenu'
+import Pop from './Pop'
 
 const Header = () => {
     const [showPop, setShowPop] = useState(false)
@@ -42,7 +42,7 @@ const Header = () => {
                 <input
                     type="text"
                     placeholder="探索"
-                    className="w-24 h-8 ml-20 pl-3 py-1 text-sm bg-gray-100 rounded-l"
+                    className="w-24 h-8 ml-20 pl-3 py-1 text-sm bg-gray-100 rounded-l outline-none focus:w-36 focus:ml-8 transition-all duration-500 ease-in-out"
                 />
                 <div className="iconfont icon-sousuo w-8 h-8 mr-5 text-sm text-center leading-8 bg-gray-100 rounded-r" />
                 <div

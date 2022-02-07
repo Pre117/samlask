@@ -11,7 +11,7 @@ const BOTTOM_SCROLL_TOP = 1000000
 const initReceiveMessage: IMessage = {
     userId: '',
     message: '',
-    date: ''
+    date: '',
 }
 
 const initMessageRecord: IMessageItem[] = [
@@ -59,7 +59,7 @@ const ChatRoom = (props: {
             ...recordList,
             {
                 avatar: avatarA,
-                messageInfo
+                messageInfo,
             },
         ])
         setMessage('')
@@ -152,8 +152,8 @@ const ChatRoom = (props: {
             ...recordList,
             {
                 avatar: avatarB,
-                messageInfo: receiveMessage
-            }
+                messageInfo: receiveMessage,
+            },
         ])
     }, [receiveMessage])
 
@@ -182,7 +182,10 @@ const ChatRoom = (props: {
                 <div className="w-16">设置</div>
             </div>
             <div className="h-14"></div>
-            <div id="chatMessageList" className="w-full h-chatRoom bg-gray-100 overflow-x-hidden overflow-y-scroll">
+            <div
+                id="chatMessageList"
+                className="w-full h-chatRoom bg-gray-100 overflow-x-hidden overflow-y-scroll"
+            >
                 {recordList.map((item: any, index: number) => (
                     <MessageItem key={index} {...item} />
                 ))}
@@ -195,11 +198,14 @@ const ChatRoom = (props: {
                     placeholder="请输入消息..."
                     maxLength={120}
                     rows={getTextRow}
-                    className='w-4/5 p-2 mr-4 resize-none border rounded'
+                    className="w-4/5 p-2 mr-4 resize-none border rounded outline-none"
                     value={message}
                     onChange={onChangeMessage}
                 />
-                <button onClick={onSendMessage} className="w-1/5 h-10 mb-px self-end border rounded text-sm text-white bg-green-500">
+                <button
+                    onClick={onSendMessage}
+                    className="w-1/5 h-10 mb-px self-end border rounded text-sm text-white bg-green-500"
+                >
                     发送
                 </button>
             </div>
