@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import MessageItem from '../../component/MessageItem'
 import { IMessage, IMessageItem } from '../../model/message'
 import { IUserInfo } from '../../model/user'
-import { fetchRecordList } from '../../network/message'
+import { fetchRecordList, modifyRecordList } from '../../network/message'
 import socket from '../../network/socket'
 import { fetchUserInfo } from '../../network/user'
 
@@ -44,33 +44,30 @@ const ChatRoom = (props: {
     const [userInfo, setUserInfo] = useState<IUserInfo>(initUserInfo)
     const [avatarA, setAvatarA] = useState('')
     const [avatarB, setAvatarB] = useState('')
-    const userId = localStorage.getItem('userId')
+    const userId = localStorage.getItem('userId') as string
 
     const onChangeMessage = (event: any) => setMessage(event.target.value)
 
-    const onSendMessage = () => {
+    const onSendMessage = async () => {
+        const messageInfo = {
+            userId: userId,
+            message,
+            date: '2022/2/6',
+        }
+
         setRecordList([
             ...recordList,
             {
                 avatar: avatarA,
-                messageInfo: {
-                    userId: userId as string,
-                    message,
-                    date: '2022/2/6',
-                },
+                messageInfo
             },
         ])
         setMessage('')
-        // socket.emit(`origin: ${userId}, destination: ${contactUserId}`, {
-        //     userId: userId as string,
-        //     message,
-        //     date: '2022/2/6',
-        // })
-        socket.emit('private message', userId, contactUserId, {
-            userId: userId as string,
-            message,
-            date: '2022/2/6',
-        })
+        socket.emit('private message', userId, contactUserId, messageInfo)
+
+        const code = await modifyRecordList(userId, contactUserId, messageInfo)
+
+        console.log(code === 0 ? '修改成功' : '修改失败')
     }
 
     // 滚动到底部
@@ -105,7 +102,7 @@ const ChatRoom = (props: {
     // 获取两个用户的头像、另一个用户的信息
     const getAvatar = useCallback(async () => {
         if (contactUserId !== '') {
-            const userInfoA = await fetchUserInfo(userId as string)
+            const userInfoA = await fetchUserInfo(userId)
             const userInfoB = await fetchUserInfo(contactUserId)
             setUserInfo(userInfoB)
 
@@ -117,7 +114,7 @@ const ChatRoom = (props: {
     // 获取两个用户的聊天纪录
     const getRecordList = useCallback(async () => {
         if (contactUserId && avatarA && avatarB) {
-            const result = await fetchRecordList(userId as string, contactUserId)
+            const result = await fetchRecordList(userId, contactUserId)
 
             const newList = result.messageRecord.map((item: any) => {
                 if (item.userId === userId) {
