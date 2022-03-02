@@ -62,7 +62,7 @@ const Header = () => {
                 >
                     登录
                 </div>
-                <DropDownMenu showDropMenu={showDropMenu} />
+                <DropDownMenu showDropMenu={showDropMenu} closeDropMenu={() => setShowDropMenu(false)} />
             </div>
             <div className="h-14"></div>
             <Pop isShow={showPop} scrollTop={scrollTop} onCancel={onCancel} setLogin={setLogin} />

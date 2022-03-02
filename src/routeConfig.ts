@@ -11,7 +11,7 @@ const routeConfig: IRouteConfig[] = [
         exact: true,
     },
     {
-        path: '/reach-editor',
+        path: '/rich-editor',
         component: Editor,
         exact: true,
     },
