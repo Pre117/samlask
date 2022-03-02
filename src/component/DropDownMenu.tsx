@@ -16,9 +16,14 @@ const DropDownMenu = (props: { showDropMenu: boolean; closeDropMenu: () => void 
         goToPage('/profile', history)
     }
 
-    const onGoToEditor = () => {
+    const onGoToArticleEditor = () => {
         closeDropMenu()
-        goToPage('/rich-editor', history)
+        goToPage('/article-editor', history)
+    }
+
+    const onGoToPostEditor = () => {
+        closeDropMenu()
+        goToPage('/post-editor', history)
     }
 
     return (
@@ -29,10 +34,10 @@ const DropDownMenu = (props: { showDropMenu: boolean; closeDropMenu: () => void 
             <div className="w-full h-10 leading-10 hover:bg-gray-200" onClick={onGoToProfile}>
                 我的主页
             </div>
-            <div className="w-full h-10 leading-10 hover:bg-gray-200" onClick={onGoToEditor}>
+            <div className="w-full h-10 leading-10 hover:bg-gray-200" onClick={onGoToArticleEditor}>
                 写文章
             </div>
-            <div className="w-full h-10 leading-10 hover:bg-gray-200" onClick={onGoToEditor}>
+            <div className="w-full h-10 leading-10 hover:bg-gray-200" onClick={onGoToPostEditor}>
                 发帖子
             </div>
             <div className="w-full h-10 leading-10 border-t" onClick={onLogout}>

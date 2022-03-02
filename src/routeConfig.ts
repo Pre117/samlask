@@ -1,5 +1,6 @@
 import { IRouteConfig } from './model/routeConfig'
-import Editor from './pages/editor/Editor'
+import ArticleEditor from './pages/editor/ArticleEditor'
+import PostEditor from './pages/editor/PostEditor'
 import Home from './pages/home/Home'
 import Message from './pages/message/Message'
 import Profile from './pages/profile/Profile'
@@ -11,8 +12,13 @@ const routeConfig: IRouteConfig[] = [
         exact: true,
     },
     {
-        path: '/rich-editor',
-        component: Editor,
+        path: '/article-editor',
+        component: ArticleEditor,
+        exact: true,
+    },
+    {
+        path: '/post-editor',
+        component: PostEditor,
         exact: true,
     },
     {
