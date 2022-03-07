@@ -4,6 +4,7 @@ import PostEditor from './pages/editor/PostEditor'
 import Home from './pages/home/Home'
 import Message from './pages/message/Message'
 import Profile from './pages/profile/Profile'
+import Test from './pages/test/Test'
 
 const routeConfig: IRouteConfig[] = [
     {
@@ -31,6 +32,11 @@ const routeConfig: IRouteConfig[] = [
         component: Profile,
         exact: true,
     },
+    {
+        path: '/test',
+        component: Test,
+        exact: true
+    }
 ]
 
 export default routeConfig
