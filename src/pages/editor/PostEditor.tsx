@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import { nAxios } from '../../network'
+import { uploadFiles } from '../../network/editor'
 import { goToPage } from '../../utils/common'
 
 const PostEditor = () => {
@@ -15,36 +17,85 @@ const PostEditor = () => {
     }
 
     const onShowForm = () => {
-        console.log('show form: ', fileList)
+        for(let value of fileList.entries()) {
+            console.log('show file: ', value)
+        }
     }
 
-    const onNextStep = () => {
-        const file = document.querySelector<HTMLInputElement>('#file-upload')
-        console.log(file?.files)
+    const onNextStep = async () => {
+        const result = await uploadFiles(fileList)
+        console.log(result)
     }
 
+    // 将文件保存进FormData中
+    const resolveFiles = (files: FileList) => {
+        const form = fileList
+        for(let file of files) {
+            form.append('resource', file)
+        }
+
+        setFileList(form)
+    }
+
+    // drop事件处理函数
     const dropFileToUpload = (e: any) => {
         e.preventDefault()
-        const file = e.dataTransfer?.files[0]
-        console.log(file)
-        if (!file) {
+        const files = e.dataTransfer?.files
+        if (files.length === 0) {
             return
         }
 
-        const form = new FormData()
-        form.append('chopsticks', file)
-
-        setFileList({
-            ...fileList,
-            ...form
-        })
+        resolveFiles(files)
     }
 
+    // change事件处理函数
+    const inputFileToUpload = (e: any) => {
+        const files = e.target.files
+        if (files.length === 0) {
+            return
+        }
+    
+        resolveFiles(files)
+    }
+
+    // paste事件处理函数
+    const pasteFileToUpload = (e: any) => {
+        const files = e.clipboardData.files
+        if (files.length === 0) {
+            return
+        }
+
+        resolveFiles(files)
+    }
+
+    // 监听drop事件
     useEffect(() => {
-        window.addEventListener('drop', dropFileToUpload)
+        const textEditor = document.querySelector<HTMLDivElement>('#text-editor')
+        textEditor?.addEventListener('drop', dropFileToUpload)
 
         return () => {
-            window.removeEventListener('drop', dropFileToUpload)
+            textEditor?.removeEventListener('drop', dropFileToUpload)
+        }
+    }, [])
+
+    // 监听input文件输入框change事件
+    useEffect(() => {
+        const inputFile = document.querySelector<HTMLInputElement>('#file-upload')
+        
+        inputFile?.addEventListener('change', inputFileToUpload)
+
+        return () => {
+            inputFile?.addEventListener('change', inputFileToUpload)
+        }
+    }, [])
+
+    // 监听paste事件
+    useEffect(() => {
+        const textEditor = document.querySelector<HTMLDivElement>('#text-editor')
+        textEditor?.addEventListener('paste', pasteFileToUpload)
+
+        return () => {
+            textEditor?.addEventListener('paste', pasteFileToUpload)
         }
     }, [])
 
@@ -77,6 +128,7 @@ const PostEditor = () => {
                     /> */}
                     <div
                         ref={editorRef}
+                        id='text-editor'
                         className="w-full h-full p-2 outline-none"
                         contentEditable
                     ></div>
@@ -84,7 +136,7 @@ const PostEditor = () => {
                 <div className="w-full h-12 flex-shrink-0 border divide-x grid grid-cols-4 text-center items-center">
                     <input type="file" id="file-upload" multiple className="hidden" />
                     <label className="" htmlFor="file-upload">
-                        图片
+                        文件
                     </label>
                     <div className="">代码</div>
                     <div className="" onClick={onShowRef}>
