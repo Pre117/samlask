@@ -1,5 +1,5 @@
-import { useHistory } from 'react-router-dom'
-import { goToPage } from '../utils/common'
+import { useHistory } from 'react-router-dom';
+import { goToPage } from '../utils/common';
 
 const DropDownMenu = (props: { showDropMenu: boolean; closeDropMenu: () => void }) => {
     const { showDropMenu, closeDropMenu } = props

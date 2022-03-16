@@ -5,7 +5,7 @@ import axios from 'axios'
  */
 export const nAxios = axios.create({
     baseURL: 'http://localhost:9000/',
-    timeout: 2000,
+    timeout: 20000,
     timeoutErrorMessage: "连接不上服务器"
 })
 

@@ -16,26 +16,31 @@ const routeConfig: IRouteConfig[] = [
         path: '/article-editor',
         component: ArticleEditor,
         exact: true,
+        auth: true
     },
     {
         path: '/post-editor',
         component: PostEditor,
         exact: true,
+        auth: true
     },
     {
         path: '/message',
         component: Message,
         exact: true,
+        auth: true
     },
     {
         path: '/profile',
         component: Profile,
         exact: true,
+        auth: true
     },
     {
         path: '/test',
         component: Test,
-        exact: true
+        exact: true,
+        auth: true
     }
 ]
 
