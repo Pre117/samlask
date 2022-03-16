@@ -1,7 +1,14 @@
+import { useEffect } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import routeConfig from './routeConfig'
 
 const App = () => {
+    useEffect(() => {
+        if (!('theme' in localStorage)) {
+            localStorage.setItem('theme', 'light')
+        }
+    }, [])
+
     return (
         <div id="app">
             <BrowserRouter>

@@ -113,7 +113,7 @@ const Home = () => {
                 }}
             >
                 <div id="start" />
-                <div className="">
+                <div className="bg-blue-50 dark:bg-gray-800 dark:text-gray-300">
                     {testList.map((item) => (
                         <BlogItem key={item.articleId} {...item} />
                     ))}

@@ -35,7 +35,7 @@ const Header = () => {
 
     return (
         <div>
-            <div className="fixed top-0 w-full h-14 flex justify-end items-center shadow bg-white">
+            <div className="fixed top-0 w-full h-14 flex justify-end items-center shadow bg-white dark:bg-gray-700 dark:text-gray-300">
                 <div onClick={() => goToPage('/', history)} className="mr-4">
                     首页
                 </div>
@@ -44,7 +44,7 @@ const Header = () => {
                     placeholder="探索"
                     className="w-24 h-8 ml-20 pl-3 py-1 text-sm bg-gray-100 rounded-l outline-none focus:w-36 focus:ml-8 transition-all duration-500 ease-in-out"
                 />
-                <div className="iconfont icon-sousuo w-8 h-8 mr-5 text-sm text-center leading-8 bg-gray-100 rounded-r" />
+                <div className="iconfont icon-sousuo w-8 h-8 mr-5 text-sm text-center dark:text-black leading-8 bg-gray-100 rounded-r" />
                 <div
                     style={{ display: isLogin ? 'block' : 'none' }}
                     onClick={() => goToPage('/message', history)}
@@ -53,7 +53,7 @@ const Header = () => {
                 <div
                     style={{ display: isLogin ? 'block' : 'none' }}
                     onClick={() => setShowDropMenu(showDropMenu ? false : true)}
-                    className="iconfont icon-wode mr-4 w-8 h-8 border rounded-full text-center bg-gray-300"
+                    className="iconfont icon-wode mr-4 w-8 h-8 border rounded-full text-center bg-gray-300 dark:bg-black"
                 />
                 <div
                     style={{ display: isLogin ? 'none' : 'block' }}
