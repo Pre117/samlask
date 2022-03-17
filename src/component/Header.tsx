@@ -35,16 +35,16 @@ const Header = () => {
 
     return (
         <div>
-            <div className="fixed top-0 w-full h-14 flex justify-end items-center shadow bg-white dark:bg-gray-700 dark:text-gray-300">
+            <div className="fixed top-0 w-full h-14 flex justify-end items-center border-b shadow bg-white dark:bg-dark-head dark:text-gray-300 dark:border-dark-icon">
                 <div onClick={() => goToPage('/', history)} className="mr-4">
                     首页
                 </div>
                 <input
                     type="text"
                     placeholder="探索"
-                    className="w-24 h-8 ml-20 pl-3 py-1 text-sm bg-gray-100 rounded-l outline-none focus:w-36 focus:ml-8 transition-all duration-500 ease-in-out"
+                    className="w-24 h-8 ml-20 pl-3 py-1 text-sm bg-gray-100 dark:bg-dark-fill rounded-l outline-none focus:w-36 focus:ml-8 transition-width duration-500 ease-in-out"
                 />
-                <div className="iconfont icon-sousuo w-8 h-8 mr-5 text-sm text-center dark:text-black leading-8 bg-gray-100 rounded-r" />
+                <div className="iconfont icon-sousuo w-8 h-8 mr-5 text-sm text-center leading-8 bg-gray-100 dark:bg-dark-fill rounded-r" />
                 <div
                     style={{ display: isLogin ? 'block' : 'none' }}
                     onClick={() => goToPage('/message', history)}
@@ -53,7 +53,7 @@ const Header = () => {
                 <div
                     style={{ display: isLogin ? 'block' : 'none' }}
                     onClick={() => setShowDropMenu(showDropMenu ? false : true)}
-                    className="iconfont icon-wode mr-4 w-8 h-8 border rounded-full text-center bg-gray-300 dark:bg-black"
+                    className="iconfont icon-wode mr-4 w-8 h-8 border rounded-full text-center bg-gray-300 dark:bg-dark-head"
                 />
                 <div
                     style={{ display: isLogin ? 'none' : 'block' }}
@@ -62,7 +62,10 @@ const Header = () => {
                 >
                     登录
                 </div>
-                <DropDownMenu showDropMenu={showDropMenu} closeDropMenu={() => setShowDropMenu(false)} />
+                <DropDownMenu
+                    showDropMenu={showDropMenu}
+                    closeDropMenu={() => setShowDropMenu(false)}
+                />
             </div>
             <div className="h-14"></div>
             <Pop isShow={showPop} scrollTop={scrollTop} onCancel={onCancel} setLogin={setLogin} />

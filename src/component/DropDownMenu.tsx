@@ -36,7 +36,7 @@ const DropDownMenu = (props: { showDropMenu: boolean; closeDropMenu: () => void 
     return (
         <div
             style={{ display: showDropMenu ? 'flex' : 'none' }}
-            className="w-24 absolute top-14 border-y border-l rounded-l shadow bg-white dark:bg-gray-700 dark:text-white flex-col items-center text-sm text-center text-gray-500"
+            className="w-24 absolute top-14 border-y border-l rounded-l shadow bg-white dark:bg-dark-head dark:text-dark-text dark:border-dark-icon flex-col items-center text-sm text-center text-gray-500"
         >
             <div
                 className="w-full h-10 leading-10 hover:bg-gray-200"
@@ -59,7 +59,7 @@ const DropDownMenu = (props: { showDropMenu: boolean; closeDropMenu: () => void 
             <div className="w-full h-10 leading-10" onClick={onChangeTheme}>
                 {isDark ? '日间模式' : '夜间模式'}
             </div>
-            <div className="w-full h-10 leading-10 border-t" onClick={onLogout}>
+            <div className="w-full h-10 leading-10 border-t dark:border-dark-icon" onClick={onLogout}>
                 退出
             </div>
         </div>
