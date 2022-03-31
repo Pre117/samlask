@@ -111,10 +111,10 @@ const Home = () => {
                 style={{
                     paddingTop: (showStart - 1) * 127 + 'px',
                 }}
-                className="dark:bg-black"
+                className="dark:bg-dark-bg bg-blue-50"
             >
                 <div id="start" />
-                <div className="bg-blue-50 dark:bg-dark-bg">
+                <div className="sm:w-4/5 md:w-4/5 lg:w-3/5 xl:w-2/5 m-auto  dark:bg-dark-bg">
                     {testList.map((item) => (
                         <BlogItem key={item.articleId} {...item} />
                     ))}

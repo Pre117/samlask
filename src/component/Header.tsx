@@ -35,37 +35,45 @@ const Header = () => {
 
     return (
         <div>
-            <div className="fixed top-0 w-full h-14 flex justify-end items-center border-b shadow bg-white dark:bg-dark-head dark:text-gray-300 dark:border-dark-icon">
-                <div onClick={() => goToPage('/', history)} className="mr-4">
-                    首页
+            <div className="fixed top-0 w-full h-14 border-b shadow bg-white dark:bg-dark-head dark:text-gray-300 dark:border-dark-icon">
+                <div className="sm:w-4/5 md:w-4/5 lg:w-3/5 xl:w-2/5 h-full m-auto flex justify-evenly items-center">
+                    <div onClick={() => goToPage('/', history)} className="mx-3">
+                        首页
+                    </div>
+                    <div className="flex">
+                        <input
+                            type="text"
+                            placeholder="探索"
+                            className="w-24 h-8 ml-20 pl-3 py-1 text-sm bg-gray-100 dark:bg-dark-fill rounded-l outline-none focus:w-36 focus:ml-8 transition-width duration-500 ease-in-out"
+                        />
+                        <div className="iconfont icon-sousuo w-8 h-8 mr-5 text-sm text-center leading-8 bg-gray-100 dark:bg-dark-fill rounded-r" />
+                    </div>
+
+                    <div className='flex'>
+                        <div
+                            style={{ display: isLogin ? 'block' : 'none' }}
+                            onClick={() => goToPage('/message', history)}
+                            className="iconfont icon-xiaoxi mr-6"
+                        />
+                        <div
+                            style={{ display: isLogin ? 'block' : 'none' }}
+                            onClick={() => setShowDropMenu(showDropMenu ? false : true)}
+                            className="iconfont icon-wode mr-4 w-8 h-8 border rounded-full text-center bg-gray-300 dark:bg-dark-head"
+                        />
+                        <div
+                            style={{ display: isLogin ? 'none' : 'block' }}
+                            onClick={onPop}
+                            className="w-16 h-8 mr-5 bg-green-500 text-white text-sm text-center leading-8 rounded"
+                        >
+                            登录
+                        </div>
+                    </div>
+
+                    <DropDownMenu
+                        showDropMenu={showDropMenu}
+                        closeDropMenu={() => setShowDropMenu(false)}
+                    />
                 </div>
-                <input
-                    type="text"
-                    placeholder="探索"
-                    className="w-24 h-8 ml-20 pl-3 py-1 text-sm bg-gray-100 dark:bg-dark-fill rounded-l outline-none focus:w-36 focus:ml-8 transition-width duration-500 ease-in-out"
-                />
-                <div className="iconfont icon-sousuo w-8 h-8 mr-5 text-sm text-center leading-8 bg-gray-100 dark:bg-dark-fill rounded-r" />
-                <div
-                    style={{ display: isLogin ? 'block' : 'none' }}
-                    onClick={() => goToPage('/message', history)}
-                    className="iconfont icon-xiaoxi mr-6"
-                />
-                <div
-                    style={{ display: isLogin ? 'block' : 'none' }}
-                    onClick={() => setShowDropMenu(showDropMenu ? false : true)}
-                    className="iconfont icon-wode mr-4 w-8 h-8 border rounded-full text-center bg-gray-300 dark:bg-dark-head"
-                />
-                <div
-                    style={{ display: isLogin ? 'none' : 'block' }}
-                    onClick={onPop}
-                    className="w-16 h-8 mr-5 bg-green-500 text-white text-sm text-center leading-8 rounded"
-                >
-                    登录
-                </div>
-                <DropDownMenu
-                    showDropMenu={showDropMenu}
-                    closeDropMenu={() => setShowDropMenu(false)}
-                />
             </div>
             <div className="h-14"></div>
             <Pop isShow={showPop} scrollTop={scrollTop} onCancel={onCancel} setLogin={setLogin} />

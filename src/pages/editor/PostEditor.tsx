@@ -177,6 +177,17 @@ const PostEditor = () => {
         }
     }, [])
 
+    useEffect(() => {
+        const worker = new Worker('/public/hash.js')
+        console.log(worker)
+        worker.postMessage('foo')
+        worker.postMessage('bar')
+
+        return () => {
+            worker.terminate()
+        }
+    }, [])
+
     return (
         <div id="editor" className="h-screen flex flex-col">
             <div className="w-full h-14 flex justify-between items-center text-center shadow flex-shrink-0">
