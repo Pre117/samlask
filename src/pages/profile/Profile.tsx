@@ -31,9 +31,9 @@ const Profile = () => {
     }, [])
 
     return (
-        <div className="bg-gray-100">
+        <div className="h-full bg-gray-100">
             <Header />
-            <div className="mt-8 p-6 bg-white flex flex-col items-center">
+            <div className="mt-8 mb-6 p-6 bg-white flex flex-col items-center">
                 <div className="w-24 h-24">
                     <img src={userInfo.avatar} className="rounded-full" />
                 </div>
@@ -51,12 +51,15 @@ const Profile = () => {
                         <div>{userInfo.points}</div>
                         <div className='text-sm text-gray-400'>积分</div>
                     </div>
-                    <div className='w-20 h-8 border text-center'>设置</div>
+                    <div className='w-20 h-8 leading-8 border border-green-400 rounded text-green-500 text-center text-sm self-center'>设置</div>
                 </div>
             </div>
-            我是个人主页
-            <div>用户名：{userInfo.username}</div>
-            <div>积分：{userInfo.points}</div>
+            <div className='bg-white'>
+                <div className='h-8'>
+
+                </div>
+                <div></div>
+            </div>
         </div>
     )
 }
