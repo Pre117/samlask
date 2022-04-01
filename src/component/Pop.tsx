@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
+import { useAppDispatch } from '../hooks'
 import { userLogin } from '../network/user'
+import { setUserInfo } from '../redux/reducers/userSlice'
 
 const Pop = (props: {
     isShow: boolean
@@ -9,6 +11,7 @@ const Pop = (props: {
 }) => {
     const [phoneNumber, setPhoneNumber] = useState('')
     const [password, setPassword] = useState('')
+    const dispatch = useAppDispatch()
 
     const { isShow, scrollTop, onCancel, setLogin } = props
 
@@ -16,16 +19,16 @@ const Pop = (props: {
         console.log(phoneNumber, password)
 
         try {
-            const data = await userLogin(phoneNumber, password)
+            const {token, userId, code, message} = await userLogin(phoneNumber, password)
 
-            console.log(data)
-
-            if (data.code === 0) {
-                localStorage.setItem('token', data.token)
-                localStorage.setItem('userId', data.userId)
+            if (code === 0) {
+                localStorage.setItem('token', token)
+                localStorage.setItem('userId', userId)
+                // 添加到redux
+                dispatch(setUserInfo({ userId, token }))
                 setLogin()
-            } else if (data.code === 1 || data.code === 2) {
-                console.log(data.message)
+            } else if (code === 1 || code === 2) {
+                console.log(message)
                 return
             }
         } catch (error) {

@@ -5,3 +5,8 @@ export interface IUserInfo {
     avatar: string,
     points: string
 }
+
+export interface IUserMetaInfo {
+    userId: string,
+    token: string
+}

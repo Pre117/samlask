@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import Header from '../../component/Header'
-import { nAxios } from '../../network'
+import { useAppSelector } from '../../hooks'
 import { IUserInfo } from '../../model/user'
 import { fetchUserInfo } from '../../network/user'
+import { userSelector } from '../../redux/reducers/userSlice'
 
 const initUserInfo: IUserInfo = {
     userId: '',
@@ -13,9 +14,9 @@ const initUserInfo: IUserInfo = {
 
 const Profile = () => {
     const [userInfo, setUserInfo] = useState<IUserInfo>(initUserInfo)
+    const { userId } = useAppSelector(userSelector)
 
     const getUserInfo = useCallback(async () => {
-        const userId = localStorage.getItem('userId') as string
         const result = await fetchUserInfo(userId)
         setUserInfo({
             userId: result.userId,
@@ -23,7 +24,6 @@ const Profile = () => {
             avatar: result.avatar,
             points: result.points,
         })
-        console.log(result)
     }, [])
 
     useEffect(() => {
