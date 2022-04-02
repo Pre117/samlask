@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { io } from 'socket.io-client'
 import MessageItem from '../../component/MessageItem'
 import { IMessage, IMessageItem } from '../../model/message'
 import { IUserInfo } from '../../model/user'
 import { fetchRecordList, modifyRecordList } from '../../network/message'
-import socket from '../../network/socket'
 import { fetchUserInfo } from '../../network/user'
+
+const socket = io('http://localhost:9000/')
 
 const BOTTOM_SCROLL_TOP = 1000000
 
