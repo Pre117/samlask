@@ -1,4 +1,5 @@
 import { IRouteConfig } from './model/routeConfig'
+import Article from './pages/article/article'
 import ArticleEditor from './pages/editor/ArticleEditor'
 import PostEditor from './pages/editor/PostEditor'
 import Home from './pages/home/Home'
@@ -35,6 +36,11 @@ const routeConfig: IRouteConfig[] = [
         component: Profile,
         exact: true,
         auth: true
+    },
+    {
+        path: '/article',
+        component: Article,
+        exact: true
     },
     {
         path: '/test',

@@ -41,7 +41,7 @@ export const debounce = (fn: any, delay: number) => {
         }
 
         timer = setTimeout(() => {
-            fn.apply(this, arguments);
+            fn.apply(null, arguments);
             timer = null;
         }, delay);
     }
