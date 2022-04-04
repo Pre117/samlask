@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { mergeFiles, uploadFiles } from '../../network/editor'
 import { goToPage } from '../../utils/common'
+import EditorHeader from './editorHeader'
 
 const CHUNK_SIZE = 10 * 1024 * 1024
 
@@ -26,31 +27,32 @@ const PostEditor = () => {
     }
 
     const onNextStep = async () => {
-        if (fileList.has('resource')) {
-            const result = await uploadFiles(fileList)
-            console.log(result)
-        }
-        if (formDataList.length > 1) {
-            const uploadRequestList = formDataList.map(
-                async (formData: FormData) => await uploadFiles(formData)
-            )
-
-            await Promise.all(uploadRequestList)
-
-            const filenameList = formDataList.map((formList) => {
-                for (let key of formList.keys()) {
-                    return key
-                }
-            })
+        // // 单文件上传
+        // if (fileList.has('resource')) {
+        //     const result = await uploadFiles(fileList)
+        //     console.log(result)
+        // }
+        // // 大文件上传
+        // if (formDataList.length > 1) {
+        //     const uploadRequestList = formDataList.map(
+        //         async (formData: FormData) => await uploadFiles(formData)
+        //     )
+        //     // 上传文件分片
+        //     await Promise.all(uploadRequestList)
+        //     // 获取文件名称列表
+        //     const filenameList = formDataList.map((formList) => {
+        //         for (let key of formList.keys()) {
+        //             return key
+        //         }
+        //     })
             
-            console.log([...new Set(filenameList)])
-            const mergeRequestList = [...new Set(filenameList)].map(
-                async (value) => await mergeFiles(value as string, CHUNK_SIZE)
-            )
-
-
-            await Promise.all(mergeRequestList).then((value) => console.log(value))
-        }
+        //     console.log([...new Set(filenameList)])
+        //     const mergeRequestList = [...new Set(filenameList)].map(
+        //         async (value) => await mergeFiles(value as string, CHUNK_SIZE)
+        //     )
+        //     // 发送合并文件分片请求
+        //     await Promise.all(mergeRequestList).then((value) => console.log(value))
+        // }
     }
 
     // 将文件保存进FormData中
@@ -190,7 +192,7 @@ const PostEditor = () => {
 
     return (
         <div id="editor" className="h-screen flex flex-col">
-            <div className="w-full h-14 flex justify-between items-center text-center shadow flex-shrink-0">
+            {/* <div className="w-full h-14 flex justify-between items-center text-center shadow flex-shrink-0">
                 <div className="w-16" onClick={() => goToPage('/', history)}>
                     返回
                 </div>
@@ -198,7 +200,8 @@ const PostEditor = () => {
                 <div className="w-16" onClick={onNextStep}>
                     下一步
                 </div>
-            </div>
+            </div> */}
+            <EditorHeader title='发布帖子' />
             <div className="flex-grow flex flex-col overflow-scroll">
                 <div className="h-12 border-b border-gray-300 flex items-center flex-shrink-0">
                     <input

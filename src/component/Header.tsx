@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import '../iconfont/NavButtonIcon.css'
 import { bodyOverflowHidden, bodyOverflowVisible, goToPage } from '../utils/common'
 import DropDownMenu from './DropDownMenu'
-import Pop from './Pop'
+import LoginPop from './Pop/LoginPop'
 
 const Header = () => {
     const [showPop, setShowPop] = useState(false)
@@ -76,7 +76,7 @@ const Header = () => {
                 </div>
             </div>
             <div className="h-14"></div>
-            <Pop isShow={showPop} scrollTop={scrollTop} onCancel={onCancel} setLogin={setLogin} />
+            <LoginPop isShow={showPop} scrollTop={scrollTop} onCancel={onCancel} setLogin={setLogin} />
         </div>
     )
 }

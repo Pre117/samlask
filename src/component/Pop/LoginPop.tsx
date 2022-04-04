@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { useAppDispatch } from '../hooks'
-import { userLogin } from '../network/user'
-import { setUserInfo } from '../redux/reducers/userSlice'
+import { useAppDispatch } from '../../hooks'
+import { userLogin } from '../../network/user'
+import { setUserInfo } from '../../redux/reducers/userSlice'
 
-const Pop = (props: {
+const LoginPop = (props: {
     isShow: boolean
     scrollTop: number
     onCancel: () => void
@@ -85,4 +85,4 @@ const Pop = (props: {
     )
 }
 
-export default React.memo(Pop)
+export default React.memo(LoginPop)
