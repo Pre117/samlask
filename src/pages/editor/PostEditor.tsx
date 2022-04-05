@@ -1,19 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import { mergeFiles, uploadFiles } from '../../network/editor'
-import { goToPage } from '../../utils/common'
 import EditorHeader from './editorHeader'
 
 const CHUNK_SIZE = 10 * 1024 * 1024
 
 const PostEditor = () => {
-    // const [content, setContent] = useState('')
+    const [title, setTitle] = useState('')
+    const [content, setContent] = useState('')
     const [fileList, setFileList] = useState<FormData>(new FormData())
     const [formDataList, setFormDataList] = useState<FormData[]>([new FormData()])
     const editorRef = useRef<HTMLDivElement>(null)
-
-    const history = useHistory()
-    // const calcRows = useMemo(() => Math.floor((window.screen.height - 16 * 6.5) / 24) - 2, [])
 
     const onShowRef = () => {
         console.log('show Ref: ', editorRef.current?.innerHTML)
@@ -45,7 +40,6 @@ const PostEditor = () => {
         //             return key
         //         }
         //     })
-            
         //     console.log([...new Set(filenameList)])
         //     const mergeRequestList = [...new Set(filenameList)].map(
         //         async (value) => await mergeFiles(value as string, CHUNK_SIZE)
@@ -117,107 +111,89 @@ const PostEditor = () => {
         return fileChunkList
     }
 
-    // drop事件处理函数
-    const dropFileToUpload = (e: any) => {
-        e.preventDefault()
-        const files = e.dataTransfer?.files
-        if (files.length === 0) {
-            return
-        }
-
-        resolveFiles(files)
+    // keyup事件处理函数
+    const keyupToSave = (e: any) => {
+        setContent(editorRef.current?.innerHTML as string)
+        console.log(content)
+        console.log(title)
     }
 
-    // change事件处理函数
-    const inputFileToUpload = (e: any) => {
-        const files = e.target.files
-        if (files.length === 0) {
-            return
-        }
-
-        resolveFiles(files)
-    }
-
-    // paste事件处理函数
-    const pasteFileToUpload = (e: any) => {
-        const files = e.clipboardData.files
-        if (files.length === 0) {
-            return
-        }
-
-        resolveFiles(files)
-    }
-
-    // 监听drop事件
+    // 监听keyup事件
     useEffect(() => {
         const textEditor = document.querySelector<HTMLDivElement>('#text-editor')
-        textEditor?.addEventListener('drop', dropFileToUpload)
+        textEditor?.addEventListener('keyup', keyupToSave)
 
-        return () => {
-            textEditor?.removeEventListener('drop', dropFileToUpload)
-        }
-    }, [])
+        return () => textEditor?.removeEventListener('keyup', keyupToSave)
+    }, [content])
 
     // 监听input文件输入框change事件
     useEffect(() => {
         const inputFile = document.querySelector<HTMLInputElement>('#file-upload')
 
-        inputFile?.addEventListener('change', inputFileToUpload)
+        inputFile?.addEventListener('change', (e: any) => {
+            const files = e.target.files
+            if (files.length === 0) {
+                return
+            }
 
-        return () => {
-            inputFile?.addEventListener('change', inputFileToUpload)
-        }
+            resolveFiles(files)
+        })
+    }, [])
+
+    // 监听drop事件
+    useEffect(() => {
+        const textEditor = document.querySelector<HTMLDivElement>('#text-editor')
+
+        textEditor?.addEventListener('drop', (e: any) => {
+            e.preventDefault()
+            const files = e.dataTransfer?.files
+            if (files.length === 0) {
+                return
+            }
+
+            resolveFiles(files)
+        })
     }, [])
 
     // 监听paste事件
     useEffect(() => {
         const textEditor = document.querySelector<HTMLDivElement>('#text-editor')
-        textEditor?.addEventListener('paste', pasteFileToUpload)
 
-        return () => {
-            textEditor?.addEventListener('paste', pasteFileToUpload)
-        }
+        textEditor?.addEventListener('paste', (e: any) => {
+            const files = e.clipboardData.files
+            if (files.length === 0) {
+                return
+            }
+
+            resolveFiles(files)
+        })
     }, [])
 
-    useEffect(() => {
-        const worker = new Worker('/public/hash.js')
-        console.log(worker)
-        worker.postMessage('foo')
-        worker.postMessage('bar')
+    // useEffect(() => {
+    //     const worker = new Worker('/hash.js')
+    //     console.log(worker)
+    //     worker.postMessage('foo')
+    //     worker.postMessage('bar')
 
-        return () => {
-            worker.terminate()
-        }
-    }, [])
+    //     return () => {
+    //         worker.terminate()
+    //     }
+    // }, [])
 
     return (
         <div id="editor" className="h-screen flex flex-col">
-            {/* <div className="w-full h-14 flex justify-between items-center text-center shadow flex-shrink-0">
-                <div className="w-16" onClick={() => goToPage('/', history)}>
-                    返回
-                </div>
-                <div>发布帖子</div>
-                <div className="w-16" onClick={onNextStep}>
-                    下一步
-                </div>
-            </div> */}
-            <EditorHeader title='发布帖子' />
+            <EditorHeader title="发布帖子" />
             <div className="flex-grow flex flex-col overflow-scroll">
                 <div className="h-12 border-b border-gray-300 flex items-center flex-shrink-0">
                     <input
                         type="text"
                         placeholder="一句话说明你遇到的问题"
                         className="w-full p-2 outline-none"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
                     />
                 </div>
                 <div className="flex-grow overflow-scroll">
-                    {/* <textarea
-                        placeholder="写下你的想法"
-                        rows={calcRows}
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                        className="w-full p-2 outline-none resize-none"
-                    /> */}
                     <div
                         ref={editorRef}
                         id="text-editor"
