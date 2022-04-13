@@ -82,14 +82,10 @@ const PostEditor = () => {
                         chunk: value,
                         hash: file.name + '-' + index,
                     }))
-                    .forEach((value: { chunk: Blob; hash: string }, index: number) => {
-                        // console.log(new File([value.chunk], value.hash));
+                    .forEach((value: { chunk: Blob; hash: string }) => {
                         const newFile = new File([value.chunk], value.hash)
                         const formItem = new FormData()
-                        // formItem.append('chunk', value.chunk)
                         formItem.append(`${file.name}`, newFile)
-                        // form.append('chunk', value.chunk)
-                        // formItem.append('hash', value.hash)
                         formList.push(formItem)
                     })
             }
