@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react"
+import { useHistory } from "react-router-dom"
 import PublishPop from "../../component/Pop/PublishPop"
 import { goToPage } from "../../utils/common"
 
@@ -7,6 +8,7 @@ const EditorHeader = (props: {
 }) => {
     const { title } = props
     const [isShowPop, setIsShowPop] = useState(false)
+    const history = useHistory()
 
     const onNextStep = () => {
         setIsShowPop(true)
