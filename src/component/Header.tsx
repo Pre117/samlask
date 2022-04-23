@@ -49,7 +49,7 @@ const Header = () => {
                         <div className="iconfont icon-sousuo w-8 h-8 mr-5 text-sm text-center leading-8 bg-gray-100 dark:bg-dark-fill rounded-r" />
                     </div>
 
-                    <div className='flex'>
+                    <div className="flex">
                         <div
                             style={{ display: isLogin ? 'block' : 'none' }}
                             onClick={() => goToPage('/message', history)}
@@ -67,16 +67,20 @@ const Header = () => {
                         >
                             登录
                         </div>
+                        <DropDownMenu
+                            showDropMenu={showDropMenu}
+                            closeDropMenu={() => setShowDropMenu(false)}
+                        />
                     </div>
-
-                    <DropDownMenu
-                        showDropMenu={showDropMenu}
-                        closeDropMenu={() => setShowDropMenu(false)}
-                    />
                 </div>
             </div>
             <div className="h-14"></div>
-            <LoginPop isShow={showPop} scrollTop={scrollTop} onCancel={onCancel} setLogin={setLogin} />
+            <LoginPop
+                isShow={showPop}
+                scrollTop={scrollTop}
+                onCancel={onCancel}
+                setLogin={setLogin}
+            />
         </div>
     )
 }

@@ -36,7 +36,7 @@ const ArticleEditor = () => {
     return (
         <div id="editor" className="min-h-screen flex flex-col bg-blue-50">
             <EditorHeader title="发布文章" />
-            <div className="w-3/5 mx-auto my-10 border-x shadow bg-white flex-grow">
+            <div className="xl:w-3/5 xl:mx-auto xl:my-10 xl:border-x xl:shadow bg-white flex-grow">
                 <div className="flex flex-col">
                     <div className="h-12 border-y border-gray-300 flex items-center flex-shrink-0">
                         <input

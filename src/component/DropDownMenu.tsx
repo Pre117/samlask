@@ -36,7 +36,7 @@ const DropDownMenu = (props: { showDropMenu: boolean; closeDropMenu: () => void 
     return (
         <div
             style={{ display: showDropMenu ? 'flex' : 'none' }}
-            className="w-24 absolute top-14 right-0 border-y border-l rounded-l shadow bg-white dark:bg-dark-head dark:text-dark-text dark:border-dark-icon flex-col items-center text-sm text-center text-gray-500"
+            className="w-24 absolute top-14 translate-x-1 border-y border-l rounded-l shadow bg-white dark:bg-dark-head dark:text-dark-text dark:border-dark-icon flex-col items-center text-sm text-center text-gray-500"
         >
             <div
                 className="w-full h-10 leading-10 hover:bg-gray-200"
