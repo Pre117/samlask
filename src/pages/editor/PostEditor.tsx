@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import EditorHeader from './editorHeader'
+import RichEditor from './RichEditor'
 
 const CHUNK_SIZE = 10 * 1024 * 1024
 
@@ -181,18 +182,6 @@ const PostEditor = () => {
             <EditorHeader title="发布帖子" />
             <div className="flex-grow grid sm:grid-cols-2 divide-x">
                 <div className="flex flex-col">
-                    <div className='h-12 flex-shrink-0 flex divide-x'>
-                        <div>撤销</div>
-                        <div>重做</div>
-                        <div>正文</div>
-                        <div>字体大小</div>
-                        <div>加粗</div>
-                        <div>斜体</div>
-                        <div>有序列表</div>
-                        <div>无序列表</div>
-                        <div>源代码</div>
-                        <div>文件</div>
-                    </div>
                     <div className="h-12 border-y border-gray-300 flex items-center flex-shrink-0">
                         <input
                             type="text"
@@ -203,12 +192,13 @@ const PostEditor = () => {
                         />
                     </div>
                     <div className="flex-grow">
-                        <div
+                        {/* <div
                             ref={editorRef}
                             id="text-editor"
                             className="w-full h-full p-2 outline-none"
                             contentEditable={true}
-                        ></div>
+                        ></div> */}
+                        <RichEditor />
                     </div>
                     <div className="w-full h-12 flex-shrink-0 border divide-x grid grid-cols-4 text-center items-center">
                         <input type="file" id="file-upload" multiple className="hidden" />

@@ -1,180 +1,81 @@
-import isHotkey from 'is-hotkey'
-import { useCallback, useMemo } from 'react'
-import { createEditor, Descendant, Editor, Element, Text, Transforms } from 'slate'
-import { Editable, Slate, withReact } from 'slate-react'
-import { TCustomEditor } from './EditorTypes'
-
-const HOTKEYS = {
-    'mod+b': 'bold',
-    'mod+i': 'italic',
-    'mod+u': 'underline',
-    'mod+`': 'code',
-}
-
-const CustomEditor = {
-    isBoldMarkActive(editor: TCustomEditor) {
-        const [match] = Editor.nodes(editor, {
-            match: (n) => Text.isText(n) && n.bold === true,
-            universal: true,
-        })
-
-        return !!match
-    },
-
-    isCodeBlackActive(editor: TCustomEditor) {
-        const [match] = Editor.nodes(editor, {
-            match: (n) => Element.isElement(n) && n.type === 'code',
-        })
-
-        return !!match
-    },
-
-    toggleBoldMark(editor: TCustomEditor) {
-        const isActive = CustomEditor.isBoldMarkActive(editor)
-        Transforms.setNodes(
-            editor,
-            { bold: isActive ? false : true },
-            { match: (n) => Text.isText(n), split: true }
-        )
-    },
-
-    toggleCodeBlock(editor: TCustomEditor) {
-        const isActive = CustomEditor.isCodeBlackActive(editor)
-
-        Transforms.setNodes(
-            editor,
-            { type: isActive ? 'paragraph' : 'code' },
-            { match: (n) => Editor.isBlock(editor, n) }
-        )
-    },
-}
+import { useEffect, useRef, useState } from 'react'
+import EditorHeader from './editorHeader'
+import RichEditor from './RichEditor'
 
 const ArticleEditor = () => {
-    const editor = useMemo(() => withReact(createEditor()), [])
-    const renderElement = useCallback((props) => <AllElement {...props} />, [])
-    const renderLeaf = useCallback((props) => <AllLeaf {...props} />, [])
-    const initialValue: Descendant[] = useMemo(
-        () =>
-            JSON.parse(localStorage.getItem('content') as string) || [
-                {
-                    type: 'paragraph',
-                    children: [{ text: 'A line of text in a paragraph.' }],
-                },
-            ],
-        []
-    )
+    const [title, setTitle] = useState('')
+    const [content, setContent] = useState('')
+    const editorRef = useRef<HTMLDivElement>(null)
+
+    const onNextStep = async () => {
+        // // 单文件上传
+        // if (fileList.has('resource')) {
+        //     const result = await uploadFiles(fileList)
+        //     console.log(result)
+        // }
+        // // 大文件上传
+        // if (formDataList.length > 1) {
+        //     const uploadRequestList = formDataList.map(
+        //         async (formData: FormData) => await uploadFiles(formData)
+        //     )
+        //     // 上传文件分片
+        //     await Promise.all(uploadRequestList)
+        //     // 获取文件名称列表
+        //     const filenameList = formDataList.map((formList) => {
+        //         for (let key of formList.keys()) {
+        //             return key
+        //         }
+        //     })
+        //     console.log([...new Set(filenameList)])
+        //     const mergeRequestList = [...new Set(filenameList)].map(
+        //         async (value) => await mergeFiles(value as string, CHUNK_SIZE)
+        //     )
+        //     // 发送合并文件分片请求
+        //     await Promise.all(mergeRequestList).then((value) => console.log(value))
+        // }
+    }
+
+
+    // keyup事件处理函数
+    const keyupToSave = (e: any) => {
+        setContent(editorRef.current?.innerHTML as string)
+        console.log(content)
+        // console.log(title)
+    }
+
+    // 监听keyup事件
+    useEffect(() => {
+        const textEditor = document.querySelector<HTMLDivElement>('#text-editor')
+        textEditor?.addEventListener('keyup', keyupToSave)
+
+        return () => textEditor?.removeEventListener('keyup', keyupToSave)
+    }, [content])
 
     return (
-        <Slate
-            editor={editor}
-            value={initialValue}
-            onChange={(value) => {
-                const isAstChange = editor.operations.some((op) => 'set_selection' !== op.type)
-                if (isAstChange) {
-                    const content = JSON.stringify(value)
-                    localStorage.setItem('content', content)
-                }
-            }}
-        >
-            <Editable
-                renderElement={renderElement}
-                renderLeaf={renderLeaf}
-                onKeyDown={(event) => {
-                    for (const hotkey in HOTKEYS) {
-                        if (isHotkey(hotkey, event as any)) {
-                            event.preventDefault()
-                            const mark = HOTKEYS[hotkey as keyof typeof HOTKEYS]
-                            console.log(mark)
-                            toggleMark(editor, mark)
-                        }
-                    }
-                }}
-            />
-        </Slate>
+        <div id="editor" className="h-screen flex flex-col">
+            <EditorHeader title="发布文章" />
+            <div className="flex-grow grid sm:grid-cols-2 divide-x">
+                <div className="flex flex-col">
+                    <div className="h-12 border-y border-gray-300 flex items-center flex-shrink-0">
+                        <input
+                            type="text"
+                            placeholder="一句话说明你遇到的问题"
+                            className="w-full p-2 outline-none"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex-grow flex flex-col">
+                        <RichEditor />
+                    </div>
+                </div>
+                <div className="hidden sm:block p-3">
+                    <div className='m-2 text-xl font-black'>{title}</div>
+                    <div dangerouslySetInnerHTML={{__html: content}}></div>
+                </div>
+            </div>
+        </div>
     )
-}
-
-const toggleMark = (editor: TCustomEditor, format: string) => {
-    const isActive = isMarkActive(editor, format)
-
-    if (isActive) {
-        Editor.removeMark(editor, format)
-    } else {
-        Editor.addMark(editor, format, true)
-    }
-}
-
-const isMarkActive = (editor: TCustomEditor, format: string) => {
-    const marks = Editor.marks(editor)
-    return marks ? marks[format as keyof typeof marks] === true : false
-}
-
-const AllElement = ({ attributes, children, element }: any) => {
-    const style = { textAlign: element.align }
-    switch (element.type) {
-        case 'block-quote':
-            return (
-                <blockquote style={style} {...attributes}>
-                    {children}
-                </blockquote>
-            )
-        case 'bulleted-list':
-            return (
-                <ul style={style} {...attributes}>
-                    {children}
-                </ul>
-            )
-        case 'heading-one':
-            return (
-                <h1 style={style} {...attributes}>
-                    {children}
-                </h1>
-            )
-        case 'heading-two':
-            return (
-                <h2 style={style} {...attributes}>
-                    {children}
-                </h2>
-            )
-        case 'list-item':
-            return (
-                <li style={style} {...attributes}>
-                    {children}
-                </li>
-            )
-        case 'numbered-list':
-            return (
-                <ol style={style} {...attributes}>
-                    {children}
-                </ol>
-            )
-        default:
-            return (
-                <p style={style} {...attributes}>
-                    {children}
-                </p>
-            )
-    }
-}
-
-const AllLeaf = ({ attributes, children, leaf }: any) => {
-    if (leaf.bold) {
-        children = <strong>{children}</strong>
-    }
-
-    if (leaf.code) {
-        children = <code>{children}</code>
-    }
-
-    if (leaf.italic) {
-        children = <em>{children}</em>
-    }
-
-    if (leaf.underline) {
-        children = <u>{children}</u>
-    }
-
-    return <span {...attributes}>{children}</span>
 }
 
 export default ArticleEditor

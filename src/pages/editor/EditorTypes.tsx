@@ -4,19 +4,22 @@ import { ReactEditor } from 'slate-react'
 
 export type TCustomEditor = BaseEditor & ReactEditor & HistoryEditor
 
+export type TFormat = 'paragraph' | 'heading-one' | 'code' | 'list-item'
+
 export type TParagraphElement = {
-    type: 'paragraph'
+    type: TFormat
+    align?: string
     children: TCustomText[]
 }
 
 export type THeadingElement = {
-    type: 'heading'
+    type: TFormat
     level: number
     children: TCustomText[]
 }
 
 export type TCodeElement = {
-    type: 'code',
+    type: TFormat,
     children: TCustomText[]
 }
 
