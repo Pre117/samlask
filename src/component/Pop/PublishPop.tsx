@@ -60,6 +60,7 @@ const PublishPop = (props: { isShow: boolean; onCancel: () => void }) => {
         console.log(classifiedValue)
         console.log(labelValue)
         console.log(abstractValue)
+        console.log(isShow)
     }, [classifiedValue, labelValue, abstractValue])
 
     return (

@@ -139,7 +139,8 @@ const RichEditor = () => {
             </div>
             <Editable
                 id="rich-editor"
-                className="p-2 flex-grow prose max-w-none dark:prose-invert"
+                style={{ position: 'static' }}
+                className="p-2 flex-grow prose w-screen sm:w-full sm:max-w-none dark:prose-invert"
                 placeholder="分享你的知识..."
                 renderElement={renderElement}
                 renderLeaf={renderLeaf}

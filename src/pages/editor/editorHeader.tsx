@@ -20,7 +20,7 @@ const EditorHeader = (props: {
     }, [])
 
     return (
-        <div className="w-full h-14 flex justify-between items-center text-center shadow flex-shrink-0">
+        <div className="w-full h-14 flex justify-between items-center text-center shadow bg-white flex-shrink-0">
             <div className="w-16" onClick={() => goToPage('/', history)}>
                 返回
             </div>

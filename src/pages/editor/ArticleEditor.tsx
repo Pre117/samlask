@@ -1,11 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import EditorHeader from './editorHeader'
 import RichEditor from './RichEditor'
 
 const ArticleEditor = () => {
     const [title, setTitle] = useState('')
-    const [content, setContent] = useState('')
-    const editorRef = useRef<HTMLDivElement>(null)
 
     const onNextStep = async () => {
         // // 单文件上传
@@ -35,26 +33,10 @@ const ArticleEditor = () => {
         // }
     }
 
-
-    // keyup事件处理函数
-    const keyupToSave = (e: any) => {
-        setContent(editorRef.current?.innerHTML as string)
-        console.log(content)
-        // console.log(title)
-    }
-
-    // 监听keyup事件
-    useEffect(() => {
-        const textEditor = document.querySelector<HTMLDivElement>('#text-editor')
-        textEditor?.addEventListener('keyup', keyupToSave)
-
-        return () => textEditor?.removeEventListener('keyup', keyupToSave)
-    }, [content])
-
     return (
-        <div id="editor" className="h-screen flex flex-col">
+        <div id="editor" className="min-h-screen flex flex-col bg-blue-50">
             <EditorHeader title="发布文章" />
-            <div className="flex-grow grid sm:grid-cols-2 divide-x">
+            <div className="w-3/5 mx-auto my-10 border-x shadow bg-white flex-grow">
                 <div className="flex flex-col">
                     <div className="h-12 border-y border-gray-300 flex items-center flex-shrink-0">
                         <input
@@ -68,10 +50,6 @@ const ArticleEditor = () => {
                     <div className="flex-grow flex flex-col">
                         <RichEditor />
                     </div>
-                </div>
-                <div className="hidden sm:block p-3">
-                    <div className='m-2 text-xl font-black'>{title}</div>
-                    <div dangerouslySetInnerHTML={{__html: content}}></div>
                 </div>
             </div>
         </div>
