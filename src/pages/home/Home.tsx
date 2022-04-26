@@ -4,21 +4,24 @@ import Header from '../../component/Header'
 import { fetchPartOfArticleList } from '../../network/article'
 
 const articleProps = {
+    articleId: '',
     username: '',
+    classification: 0,
+    tags: [''],
+    abstract: '',
     date: '',
     title: '',
-    contentPreview: '',
-    tags: [''],
 }
 
 const initArticleList = new Array(10).fill(articleProps).map(() => {
     return {
-        articleId: Math.random(),
+        articleId: String(Math.random()),
         username: '',
+        classification: 0,
+        tags: [''],
+        abstract: '',
         date: '',
         title: '',
-        contentPreview: '',
-        tags: [''],
     }
 })
 // 每次请求20个列表项

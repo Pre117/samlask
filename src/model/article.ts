@@ -1,6 +1,11 @@
+
 // 文章详情
 export interface IArticleInfo {
     userId: string,
+    username: string,
+    classification: number,
+    tags: string[],
+    abstract: string,
     title: string,
     content: string,
     date: string,
@@ -8,5 +13,13 @@ export interface IArticleInfo {
     likes?: string[],
     commentIds?: string[],
     collectors?: string[],
-    tags?: string[]
+}
+
+export interface IArticleMetaInfo {
+    userId: string,
+    classification: string,
+    tag: string[],
+    abstract: string,
+    title: string,
+    content: string
 }

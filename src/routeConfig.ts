@@ -38,7 +38,7 @@ const routeConfig: IRouteConfig[] = [
         auth: true
     },
     {
-        path: '/article',
+        path: '/article/:articleId',
         component: Article,
         exact: true
     },

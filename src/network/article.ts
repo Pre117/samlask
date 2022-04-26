@@ -38,12 +38,12 @@ export const fetchArticleUnderUser = async (userId: string) => {
 /**
  * 发表文章
  * @param articleInfo 文章详情
- * @returns 结果状态码
+ * @returns 结果
  */
 export const pushArticle = async (articleInfo: IArticleInfo) => {
-    const { data: { code } } = await nAxios.post('/article/add', { articleInfo })
+    const { data } = await nAxios.post('/article/add', { articleInfo })
 
-    return code
+    return data
 }
 
 /**

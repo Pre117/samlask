@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import EditorHeader from './editorHeader'
+import RichEditor from './RichEditor'
 
 const CHUNK_SIZE = 10 * 1024 * 1024
 
@@ -111,7 +112,7 @@ const PostEditor = () => {
     const keyupToSave = (e: any) => {
         setContent(editorRef.current?.innerHTML as string)
         console.log(content)
-        console.log(title)
+        // console.log(title)
     }
 
     // 监听keyup事件
@@ -179,36 +180,43 @@ const PostEditor = () => {
     return (
         <div id="editor" className="h-screen flex flex-col">
             <EditorHeader title="发布帖子" />
-            <div className="flex-grow flex flex-col overflow-scroll">
-                <div className="h-12 border-b border-gray-300 flex items-center flex-shrink-0">
-                    <input
-                        type="text"
-                        placeholder="一句话说明你遇到的问题"
-                        className="w-full p-2 outline-none"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
-                </div>
-                <div className="flex-grow overflow-scroll">
-                    <div
-                        ref={editorRef}
-                        id="text-editor"
-                        className="w-full h-full p-2 outline-none"
-                        contentEditable
-                    ></div>
-                </div>
-                <div className="w-full h-12 flex-shrink-0 border divide-x grid grid-cols-4 text-center items-center">
-                    <input type="file" id="file-upload" multiple className="hidden" />
-                    <label className="" htmlFor="file-upload">
-                        文件
-                    </label>
-                    <div className="">代码</div>
-                    <div className="" onClick={onShowRef}>
-                        链接
+            <div className="flex-grow grid sm:grid-cols-2 divide-x">
+                <div className="flex flex-col">
+                    <div className="h-12 border-y border-gray-300 flex items-center flex-shrink-0">
+                        <input
+                            type="text"
+                            placeholder="一句话说明你遇到的问题"
+                            className="w-full p-2 outline-none"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                        />
                     </div>
-                    <div className="" onClick={onShowForm}>
-                        预览
+                    <div className="flex-grow">
+                        {/* <div
+                            ref={editorRef}
+                            id="text-editor"
+                            className="w-full h-full p-2 outline-none"
+                            contentEditable={true}
+                        ></div> */}
+                        <RichEditor />
                     </div>
+                    <div className="w-full h-12 flex-shrink-0 border divide-x grid grid-cols-4 text-center items-center">
+                        <input type="file" id="file-upload" multiple className="hidden" />
+                        <label className="" htmlFor="file-upload">
+                            文件
+                        </label>
+                        <div className="">代码</div>
+                        <div className="" onClick={onShowRef}>
+                            链接
+                        </div>
+                        <div className="" onClick={onShowForm}>
+                            预览
+                        </div>
+                    </div>
+                </div>
+                <div className="hidden sm:block p-3">
+                    <div className='m-2 text-xl font-black'>{title}</div>
+                    <div dangerouslySetInnerHTML={{__html: content}}></div>
                 </div>
             </div>
         </div>
