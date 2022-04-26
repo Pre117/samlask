@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import EditorHeader from './editorHeader'
 import RichEditor from './RichEditor'
 
 const ArticleEditor = () => {
-    const [title, setTitle] = useState('')
+    const [title, setTitle] = useState(localStorage.getItem('title') || '')
 
     const onNextStep = async () => {
         // // 单文件上传
@@ -32,6 +32,11 @@ const ArticleEditor = () => {
         //     await Promise.all(mergeRequestList).then((value) => console.log(value))
         // }
     }
+
+
+    useEffect(() => {
+        localStorage.setItem('title', title)
+    }, [title])
 
     return (
         <div id="editor" className="min-h-screen flex flex-col bg-blue-50">

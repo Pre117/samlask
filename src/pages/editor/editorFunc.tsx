@@ -1,6 +1,6 @@
 import { Editor, Element, Transforms } from "slate"
 import { useSlate } from "slate-react"
-import { TCustomEditor, TFormat } from "./EditorTypes"
+import { TCustomEditor, TFormat } from "../../model/EditorTypes"
 
 export const HOTKEYS = {
     'mod+b': 'bold',
