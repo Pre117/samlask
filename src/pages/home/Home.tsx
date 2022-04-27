@@ -11,6 +11,10 @@ const articleProps = {
     abstract: '',
     date: '',
     title: '',
+    views: 0,
+    likes: [],
+    commentCount: 0,
+    collectorCount: 0
 }
 
 const initArticleList = new Array(10).fill(articleProps).map(() => {
@@ -22,6 +26,10 @@ const initArticleList = new Array(10).fill(articleProps).map(() => {
         abstract: '',
         date: '',
         title: '',
+        views: 0,
+        likes: [],
+        commentCount: 0,
+        collectorCount: 0
     }
 })
 // 每次请求20个列表项
@@ -37,7 +45,7 @@ const Home = () => {
     // 判断数据库的列表项是否已经全部获取完毕
     const [over, setOver] = useState(false)
     // 存储Intersection Observer实例的引用
-    const observer = useRef<IntersectionObserver>()
+    const observer = useRef<IntersectionObserver>() 
     // 拉取第一部分的文章列表
     const getFirstPartOfArticleList = useCallback(async () => {
         const result = await fetchPartOfArticleList(ARTICLE_COUNT_LIMIT, page)

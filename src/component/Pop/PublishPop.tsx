@@ -51,7 +51,7 @@ const PublishPop = (props: { isShow: boolean; onCancel: () => void }) => {
         console.log(res.code, res.result)
 
         if (res.code === 0) {
-            history.push(`/article/${res.result._id}`)
+            // history.push(`/article/${res.result._id}`)
         }
     }
 
