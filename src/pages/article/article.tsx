@@ -18,7 +18,13 @@ const Article = () => {
     const renderLeaf = useCallback((props) => <AllLeaf {...props} />, [])
 
     const initialValue: Descendant[] = useMemo(() => {
-        return JSON.parse(localStorage.getItem('content') as string)
+        // return JSON.parse(localStorage.getItem('content') as string)
+        return [
+            {
+                type: 'paragraph',
+                children: [{ text: '' }],
+            },
+        ]
     }, [articleInfo])
 
     const getArticleInfo = async () => {
@@ -51,32 +57,21 @@ const Article = () => {
             <div className="mt-8 px-6 py-8 bg-white">
                 <h1 className="mb-6 text-3xl font-bold">{articleInfo.title}</h1>
                 <div className="h-12 mb-6 flex justify-between items-center">
-                    <div className="w-12 h-12">
+                    <div className="w-12 h-12 mr-2">
                         <img src={userInfo.avatar} className="rounded-full" />
                     </div>
-                    <div className="flex flex-col">
-                        <div className="text-gray-600">{articleInfo.username}</div>
-                        <div className="font-sans text-sm text-gray-400">
-                            {articleInfo.date.split(' ')[4]} · 阅读 {articleInfo.views}
+                    <div className="flex-grow flex flex-col">
+                        <div className="text-gray-600">{articleInfo.username}大哥</div>
+                        <div className="font-sans text-xs text-gray-400">
+                            {articleInfo.date} · 阅读 {articleInfo.views}
                         </div>
                     </div>
-                    <div className="w-20 h-10 bg-green-500 border rounded text-center text-sm text-white leading-10">
+                    <div className="w-20 h-10 bg-green-100 border border-green-500 rounded text-sm text-green-500 flex justify-center items-center">
                         关注
                     </div>
                 </div>
                 <div>
-                    <Slate
-                        editor={editor}
-                        value={initialValue}
-                        onChange={(value) => {
-                            const isAstChange = editor.operations.some(
-                                (op) => 'set_selection' !== op.type
-                            )
-                            if (isAstChange) {
-                                const content = JSON.stringify(value)
-                            }
-                        }}
-                    >
+                    <Slate editor={editor} value={initialValue}>
                         <Editable
                             id="rich-editor"
                             style={{ position: 'static' }}
@@ -92,8 +87,14 @@ const Article = () => {
                     <ClassifyLabel title="标签" valueArr={['前端', '后端', '全栈']} />
                 </div>
             </div>
-            <div className="mt-8 bg-white">
-                <div>评论</div>
+            <div className="mt-8 px-8 py-6 bg-white flex flex-col items-center">
+                <div className='mb-4 self-start text-lg font-bold'>评论</div>
+                <div
+                    className="w-full min-h-comment my-2 px-4 py-2 rounded outline-none bg-gray-100 focus:bg-white focus:border focus:border-blue-400"
+                    placeholder="输入评论（Enter换行，Ctrl + Enter发送）"
+                    contentEditable
+                />
+                <div className='w-24 h-10 self-end bg-blue-300 border rounded text-white text-sm flex justify-center items-center'>发表评论</div>
                 <div></div>
             </div>
             <div className="mt-8 mb-16 bg-white">
@@ -101,7 +102,11 @@ const Article = () => {
             </div>
             <div className="fixed bottom-0 w-full h-12 px-6 bg-white border divide-x divide-gray-300 flex justify-around items-center text-center text-lg">
                 <div className="flex-auto flex justify-center">
-                    <ThumbsUpButton likes={articleInfo.likes} articleId={articleInfo.articleId} isHomePage={false} />
+                    <ThumbsUpButton
+                        likes={articleInfo.likes}
+                        articleId={articleInfo.articleId}
+                        isHomePage={false}
+                    />
                 </div>
                 <div className="flex-auto flex justify-center">
                     <div className="iconfont icon-pinglun"></div>

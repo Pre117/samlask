@@ -45,7 +45,7 @@ const PublishPop = (props: { isShow: boolean; onCancel: () => void }) => {
             abstract,
             title,
             content,
-            date: String(new Date())
+            date: new Date().toLocaleString()
         })
 
         console.log(res.code, res.result)

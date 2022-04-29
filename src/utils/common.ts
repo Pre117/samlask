@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * @param path 要跳转的路径
  * @param history useHistory的实例
  */
@@ -18,31 +18,51 @@ export const bodyOverflowVisible = () => {
 }
 
 // 防抖
-// export const debounce = (fn: () => void, delay: number) => {
-//     let timer: any = null
-//     return function () {
-//         if (timer) {
-//             clearTimeout(timer)
-//         }
-
-//         timer = setTimeout(() => {
-//             fn.apply(this, arguments)
-//             timer = null
-//         }, delay)
-//     }
-// }
-
 export const debounce = (fn: any, delay: number) => {
-    let timer: any = null;
+    let timer: any
 
-    return function() {
+    return function () {
         if (timer) {
-            clearTimeout(timer);
+            clearTimeout(timer)
         }
 
         timer = setTimeout(() => {
-            fn.apply(null, arguments);
-            timer = null;
-        }, delay);
+            fn.apply(null, arguments)
+            timer = null
+        }, delay)
     }
+}
+
+// 时间格式处理
+export const timeFormat = (time: string) => {
+    const start = new Date(time)
+    const end = new Date()
+    const timeDiff = end.getTime() - start.getTime()
+
+    const seconds = 1000
+    const minute = seconds * 60
+    const hour = minute * 60
+    const day = hour * 24
+    const month = day * 30
+    const year = month * 12
+
+    let res = ''
+
+    if (timeDiff < seconds) {
+        res = '一秒'
+    } else if (timeDiff < minute) {
+        res = `${Math.floor(timeDiff / seconds)}秒`
+    } else if (timeDiff < hour) {
+        res = `${Math.floor(timeDiff / minute)}分钟`
+    } else if (timeDiff < day) {
+        res = `${Math.floor(timeDiff / hour)}小时`
+    } else if (timeDiff < month) {
+        res = `${Math.floor(timeDiff / day)}天`
+    } else if (timeDiff < year) {
+        res = `${Math.floor(timeDiff / month)}月`
+    } else {
+        res = `${Math.floor(timeDiff / year)}年`
+    }
+
+    return `${res}前`
 }

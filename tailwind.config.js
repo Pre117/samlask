@@ -9,6 +9,9 @@ module.exports = {
             height: {
                 chatRoom: 'calc(100% - 7rem)',
             },
+            minHeight: {
+                comment: '4.5rem',
+            },
             maxWidth: {
                 '3/5': '60%',
             },
@@ -19,7 +22,7 @@ module.exports = {
                     icon: 'rgb(60, 60, 60)',
                     text: 'rgb(179, 179, 179)',
                     bg: 'rgb(26, 26, 26)',
-                    fill: 'hsla(0, 0%, 100%, .1)'
+                    fill: 'hsla(0, 0%, 100%, .1)',
                 },
             },
         },

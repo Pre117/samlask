@@ -7,6 +7,8 @@ export interface ILike {
 
 // 文章详情
 export interface IArticleInfo {
+    userId: string,
+    username: string,
     classification?: number,
     tags?: string[],
     abstract?: string,
