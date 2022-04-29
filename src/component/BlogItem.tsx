@@ -1,11 +1,8 @@
-import { useMemo, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { useAppSelector } from '../hooks'
 import '../iconfont/interaction.css'
 import { IArticleListItemInfo } from '../model/article'
-import { modifyArticle } from '../network/article'
-import { userSelector } from '../redux/reducers/userSlice'
 import { goToPage } from '../utils/common'
+import ThumbsUpButton from './ThumbsUpButtom'
 
 const BlogItem = ({
     articleId,
@@ -18,46 +15,7 @@ const BlogItem = ({
     likes,
     commentCount,
 }: IArticleListItemInfo) => {
-    const { userId } = useAppSelector(userSelector)
-    const hasThumbsUp = useMemo(() => {
-        if (likes.find((item) => item.userId === userId)) {
-            return true
-        } else {
-            return false
-        }
-    }, [likes])
-
-    console.log(hasThumbsUp)
-
-    const [likeCount, setLikeCount] = useState(likes.length)
-    const [isThumbsUp, setIsThumbsUp] = useState(hasThumbsUp)
-
     const history = useHistory()
-
-    const onThumbsUp = async (event: any) => {
-        event.stopPropagation()
-
-        // 判断该用户是否已经点过赞
-        if (isThumbsUp) {
-            const code = await modifyArticle(articleId, {
-                likes: [...likes.filter((item) => item.userId !== userId)],
-            })
-
-            if (code === 0) {
-                setLikeCount(likeCount - 1)
-                setIsThumbsUp(false)
-            }
-        } else {
-            const code = await modifyArticle(articleId, {
-                likes: [{ userId, date: JSON.stringify(new Date()) }],
-            })
-
-            if (code === 0) {
-                setLikeCount(likeCount + 1)
-                setIsThumbsUp(true)
-            }
-        }
-    }
 
     return (
         <div
@@ -84,10 +42,7 @@ const BlogItem = ({
                     <div className="iconfont icon-yanjing mr-1" />
                     <div className="text-gray-500">{views}</div>
                 </div>
-                <div className="flex" onClick={onThumbsUp}>
-                    <div className={`iconfont ${isThumbsUp ? 'icon-dianzan1' : 'icon-dianzan' } mr-1`}></div>
-                    <div className="text-gray-500">{likeCount}</div>
-                </div>
+                <ThumbsUpButton likes={likes} articleId={articleId} />
                 <div className="flex">
                     <div className="iconfont icon-pinglun mr-1"></div>
                     <div className="text-gray-500">{commentCount}</div>

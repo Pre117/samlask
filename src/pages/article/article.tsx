@@ -2,26 +2,23 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { createEditor, Descendant } from 'slate'
 import { Editable, Slate, withReact } from 'slate-react'
 import Header from '../../component/Header'
+import ThumbsUpButton from '../../component/ThumbsUpButtom'
+import '../../iconfont/interaction.css'
 import { fetchSingleArticle } from '../../network/article'
 import { fetchUserInfo } from '../../network/user'
 import { AllElement, AllLeaf } from '../editor/editorFunc'
 import avatar from './EarthSpirit.jpg'
 
 const Article = () => {
+    const editor = useMemo(() => withReact(createEditor()), [])
     const [articleInfo, setArticleInfo] = useState(initialArticleInfo)
     const [userInfo, setUserInfo] = useState(initialUserInfo)
 
-    const editor = useMemo(() => withReact(createEditor()), [])
     const renderElement = useCallback((props) => <AllElement {...props} />, [])
     const renderLeaf = useCallback((props) => <AllLeaf {...props} />, [])
 
     const initialValue: Descendant[] = useMemo(() => {
-        console.log(articleInfo.content)
-        // console.log(eval(articleInfo.content))
-        // console.log(JSON.parse(articleInfo.content))
-        return (
-            JSON.parse(localStorage.getItem('content') as string)
-        )
+        return JSON.parse(localStorage.getItem('content') as string)
     }, [articleInfo])
 
     const getArticleInfo = async () => {
@@ -37,7 +34,6 @@ const Article = () => {
 
     const getUserInfo = async () => {
         const res = await fetchUserInfo(articleInfo.userId)
-        console.log(res)
         res && setUserInfo(res)
     }
 
@@ -48,14 +44,6 @@ const Article = () => {
     useEffect(() => {
         getUserInfo()
     }, [articleInfo])
-
-    useEffect(() => {
-        console.log(articleInfo)
-    }, [articleInfo])
-
-    useEffect(() => {
-        console.log(initialValue)
-    }, [initialValue])
 
     return (
         <div className="bg-gray-100">
@@ -69,7 +57,7 @@ const Article = () => {
                     <div className="flex flex-col">
                         <div className="text-gray-600">{articleInfo.username}</div>
                         <div className="font-sans text-sm text-gray-400">
-                            {articleInfo.date.split(' ')[4]} · 阅读 4038
+                            {articleInfo.date.split(' ')[4]} · 阅读 {articleInfo.views}
                         </div>
                     </div>
                     <div className="w-20 h-10 bg-green-500 border rounded text-center text-sm text-white leading-10">
@@ -86,7 +74,6 @@ const Article = () => {
                             )
                             if (isAstChange) {
                                 const content = JSON.stringify(value)
-                                console.log(content)
                             }
                         }}
                     >
@@ -112,10 +99,16 @@ const Article = () => {
             <div className="mt-8 mb-16 bg-white">
                 <div>相关推荐</div>
             </div>
-            <div className="fixed bottom-0 w-full h-12 px-8 bg-white border divide-x divide-gray-300 flex justify-around items-center text-center">
-                <div className="flex-auto">点赞</div>
-                <div className="flex-auto">评论</div>
-                <div className="flex-auto">收藏</div>
+            <div className="fixed bottom-0 w-full h-12 px-6 bg-white border divide-x divide-gray-300 flex justify-around items-center text-center text-lg">
+                <div className="flex-auto flex justify-center">
+                    <ThumbsUpButton likes={articleInfo.likes} articleId={articleInfo.articleId} isHomePage={false} />
+                </div>
+                <div className="flex-auto flex justify-center">
+                    <div className="iconfont icon-pinglun"></div>
+                </div>
+                <div className="flex-auto flex justify-center">
+                    <div className="iconfont icon-shoucang"></div>
+                </div>
             </div>
         </div>
     )
@@ -136,7 +129,13 @@ const initialArticleInfo = {
         },
     ],
     date: '',
-    likes: [],
+    views: 0,
+    likes: [
+        {
+            userId: '',
+            date: '',
+        },
+    ],
     commentIds: [],
     collectors: [],
 }
@@ -145,7 +144,7 @@ const initialUserInfo = {
     userId: '',
     username: '',
     avatar: avatar,
-    points: 0
+    points: 0,
 }
 
 const ClassifyLabel = (props: { title: string; valueArr: string[] }) => (

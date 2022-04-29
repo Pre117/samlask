@@ -1,5 +1,5 @@
 // 点赞
-interface ILike {
+export interface ILike {
     userId: string,
     date: string
 }
