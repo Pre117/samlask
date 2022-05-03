@@ -68,7 +68,14 @@ export const deleteArticle = async (articleId: string) => {
 
     return code
 }
-
+/**
+ * 发送评论
+ * @param userId 用户Id
+ * @param articleId 文章Id
+ * @param content 评论内容
+ * @param date 评论时间
+ * @returns 结果
+ */
 export const pushComment = async (userId: string, articleId: string, content: string, date: string) => {
     const { data } = await nAxios.post('/comment/add', { userId, articleId, content, date })
 

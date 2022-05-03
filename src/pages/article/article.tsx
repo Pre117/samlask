@@ -6,8 +6,8 @@ import Header from '../../component/Header'
 import ThumbsUpButton from '../../component/ThumbsUpButtom'
 import { useAppSelector } from '../../hooks'
 import '../../iconfont/interaction.css'
-import { fetchSingleArticle } from '../../network/article'
-import { fetchUserInfo } from '../../network/user'
+import { fetchSingleArticle, modifyArticle } from '../../network/article'
+import { fetchUserCollector, fetchUserInfo, modifyUserCollector } from '../../network/user'
 import { userSelector } from '../../redux/reducers/userSlice'
 import { AllElement, AllLeaf } from '../editor/editorFunc'
 import avatar from './EarthSpirit.jpg'
@@ -19,7 +19,9 @@ const Article = () => {
     const { userId } = useAppSelector(userSelector)
     const [articleInfo, setArticleInfo] = useState(initialArticleInfo)
     const [userInfo, setUserInfo] = useState(initialUserInfo)
+    const [userCollectorInfo, setUserCollectorInfo] = useState(initialUserCollectorInfo)
     const [comment, setComment] = useState(initialCommentValue)
+    const [isCollector, setIsCollector] = useState(false)
 
     const renderElement = useCallback((props) => <AllElement {...props} />, [])
     const renderLeaf = useCallback((props) => <AllLeaf {...props} />, [])
@@ -50,8 +52,23 @@ const Article = () => {
         res && setUserInfo(res)
     }
 
+    const getUserCollectorInfo = async () => {
+        const {
+            result: { _id, articleList },
+        } = await fetchUserCollector(userId)
+
+        console.log(_id, articleList)
+        setIsCollector(articleList.includes(articleInfo.articleId))
+
+        setUserCollectorInfo({
+            collectorId: _id,
+            articleList,
+        })
+    }
+
+    // 发送评论
     const onSendComment = async () => {
-        if (comment.every(item => Element.isElement(item) && item.children[0].text === '')) {
+        if (comment.every((item) => Element.isElement(item) && item.children[0].text === '')) {
             console.log('内容为空')
             return
         }
@@ -75,12 +92,49 @@ const Article = () => {
         // }
     }
 
+    // 收藏或取消收藏
+    const onCollect = async () => {
+        const { collectorId, articleList } = userCollectorInfo
+        // 用户是否收藏了该文章
+        if (isCollector) {
+            const code1 = await modifyUserCollector(
+                collectorId,
+                articleList.filter((item: string) => item !== articleInfo.articleId)
+            )
+
+            const code2 = await modifyArticle(articleInfo.articleId, {
+                collectors: articleInfo.collectors.filter((item) => item !== userId),
+            })
+
+            if (code1 === 0 && code2 === 0) {
+                setIsCollector(false)
+            }
+        } else {
+            const code1 = await modifyUserCollector(collectorId, [
+                ...articleList,
+                articleInfo.articleId,
+            ])
+
+            const code2 = await modifyArticle(articleInfo.articleId, {
+                collectors: [...articleInfo.collectors, userId],
+            })
+
+            if (code1 === 0 && code2 === 0) {
+                setIsCollector(true)
+            }
+        }
+    }
+
     useEffect(() => {
         getArticleInfo()
     }, [])
 
     useEffect(() => {
         getUserInfo()
+    }, [articleInfo])
+
+    useEffect(() => {
+        getUserCollectorInfo()
     }, [articleInfo])
 
     return (
@@ -129,7 +183,10 @@ const Article = () => {
                         setComment(value)
                     }}
                 >
-                    <Editable placeholder='输入评论' className="w-full min-h-comment my-2 px-4 py-2 rounded outline-none bg-gray-100 focus:bg-white focus:border focus:border-blue-400" />
+                    <Editable
+                        placeholder="输入评论"
+                        className="w-full min-h-comment my-2 px-4 py-2 rounded outline-none bg-gray-100 focus:bg-white focus:border focus:border-blue-400"
+                    />
                 </Slate>
                 <div
                     className="w-24 h-10 self-end bg-blue-300 border rounded text-white text-sm flex justify-center items-center"
@@ -171,7 +228,10 @@ const Article = () => {
                     <div className="iconfont icon-pinglun"></div>
                 </div>
                 <div className="flex-auto flex justify-center">
-                    <div className="iconfont icon-shoucang"></div>
+                    <div
+                        onClick={onCollect}
+                        className={`iconfont ${isCollector ? 'icon-shoucang1' : 'icon-shoucang'}`}
+                    ></div>
                 </div>
             </div>
         </div>
@@ -216,6 +276,11 @@ const initialUserInfo = {
     username: '',
     avatar: avatar,
     points: 0,
+}
+
+const initialUserCollectorInfo = {
+    collectorId: '',
+    articleList: [''],
 }
 
 const ClassifyLabel = (props: { title: string; valueArr: string[] }) => (
