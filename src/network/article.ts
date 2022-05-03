@@ -68,3 +68,9 @@ export const deleteArticle = async (articleId: string) => {
 
     return code
 }
+
+export const pushComment = async (userId: string, articleId: string, content: string, date: string) => {
+    const { data } = await nAxios.post('/comment/add', { userId, articleId, content, date })
+
+    return data
+}

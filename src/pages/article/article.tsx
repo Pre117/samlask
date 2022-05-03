@@ -1,18 +1,25 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { createEditor, Descendant } from 'slate'
+import { createEditor, Descendant, Element } from 'slate'
 import { Editable, Slate, withReact } from 'slate-react'
+import CommentItem from '../../component/CommentItem'
 import Header from '../../component/Header'
 import ThumbsUpButton from '../../component/ThumbsUpButtom'
+import { useAppSelector } from '../../hooks'
 import '../../iconfont/interaction.css'
 import { fetchSingleArticle } from '../../network/article'
 import { fetchUserInfo } from '../../network/user'
+import { userSelector } from '../../redux/reducers/userSlice'
 import { AllElement, AllLeaf } from '../editor/editorFunc'
 import avatar from './EarthSpirit.jpg'
 
 const Article = () => {
     const editor = useMemo(() => withReact(createEditor()), [])
+    const commentEditor = useMemo(() => withReact(createEditor()), [])
+
+    const { userId } = useAppSelector(userSelector)
     const [articleInfo, setArticleInfo] = useState(initialArticleInfo)
     const [userInfo, setUserInfo] = useState(initialUserInfo)
+    const [comment, setComment] = useState(initialCommentValue)
 
     const renderElement = useCallback((props) => <AllElement {...props} />, [])
     const renderLeaf = useCallback((props) => <AllLeaf {...props} />, [])
@@ -41,6 +48,31 @@ const Article = () => {
     const getUserInfo = async () => {
         const res = await fetchUserInfo(articleInfo.userId)
         res && setUserInfo(res)
+    }
+
+    const onSendComment = async () => {
+        if (comment.every(item => Element.isElement(item) && item.children[0].text === '')) {
+            console.log('内容为空')
+            return
+        }
+
+        console.log(JSON.stringify(comment))
+        // console.log(new Date().toLocaleString())
+
+        // const { code, result } = await pushComment(
+        //     userId,
+        //     articleInfo.articleId,
+        //     JSON.stringify(comment),
+        //     new Date().toLocaleString()
+        // )
+
+        // if (code === 0) {
+        //     const res = await modifyArticle(articleInfo.articleId, {
+        //         commentIds: [...articleInfo.commentIds, result.commentId],
+        //     })
+
+        //     console.log(res)
+        // }
     }
 
     useEffect(() => {
@@ -88,14 +120,41 @@ const Article = () => {
                 </div>
             </div>
             <div className="mt-8 px-8 py-6 bg-white flex flex-col items-center">
-                <div className='mb-4 self-start text-lg font-bold'>评论</div>
+                <div className="mb-4 self-start text-lg font-bold">评论</div>
+                <Slate
+                    editor={commentEditor}
+                    value={comment}
+                    onChange={(value) => {
+                        console.log(JSON.stringify(value))
+                        setComment(value)
+                    }}
+                >
+                    <Editable placeholder='输入评论' className="w-full min-h-comment my-2 px-4 py-2 rounded outline-none bg-gray-100 focus:bg-white focus:border focus:border-blue-400" />
+                </Slate>
                 <div
-                    className="w-full min-h-comment my-2 px-4 py-2 rounded outline-none bg-gray-100 focus:bg-white focus:border focus:border-blue-400"
-                    placeholder="输入评论（Enter换行，Ctrl + Enter发送）"
-                    contentEditable
-                />
-                <div className='w-24 h-10 self-end bg-blue-300 border rounded text-white text-sm flex justify-center items-center'>发表评论</div>
-                <div></div>
+                    className="w-24 h-10 self-end bg-blue-300 border rounded text-white text-sm flex justify-center items-center"
+                    onClick={onSendComment}
+                >
+                    发表评论
+                </div>
+                <div>
+                    {new Array(10)
+                        .fill({
+                            commentValue: [
+                                {
+                                    type: 'paragraph',
+                                    children: [
+                                        {
+                                            text: '这是一个评论！！！这是一个评论！！！这是一个评论！！！这是一个评论！！！',
+                                        },
+                                    ],
+                                },
+                            ],
+                        })
+                        .map((item, index) => (
+                            <CommentItem key={index} {...item} />
+                        ))}
+                </div>
             </div>
             <div className="mt-8 mb-16 bg-white">
                 <div>相关推荐</div>
@@ -118,6 +177,13 @@ const Article = () => {
         </div>
     )
 }
+
+const initialCommentValue: Descendant[] = [
+    {
+        type: 'paragraph',
+        children: [{ text: '' }],
+    },
+]
 
 const initialArticleInfo = {
     articleId: '',
