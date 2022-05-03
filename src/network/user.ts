@@ -31,13 +31,13 @@ export const fetchUserLike = async (userId: string) => {
 /**
  * 修改用户点赞记录
  * @param likeId 用户点赞记录Id
- * @param articleLikeList: 
+ * @param articleList: 用户点赞过的文章Id列表
  * @returns 修改结果状态码
  */
-export const modifyUserLike = async (likeId: string, articleLikeList: []) => {
+export const modifyUserLike = async (likeId: string, articleList: string[]) => {
     const {
         data: { code },
-    } = await nAxios.post('/like/update', { likeId, articleLikeList })
+    } = await nAxios.post('/like/update', { likeId, articleList })
 
     return code
 }

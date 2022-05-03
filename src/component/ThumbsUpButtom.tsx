@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useAppSelector } from '../hooks'
 import { ILike } from '../model/article'
 import { modifyArticle } from '../network/article'
+import { fetchUserLike, modifyUserLike } from '../network/user'
 import { userSelector } from '../redux/reducers/userSlice'
 
 const ThumbsUpButton = ({ likes, articleId, isHomePage = true }: any) => {
@@ -19,23 +20,34 @@ const ThumbsUpButton = ({ likes, articleId, isHomePage = true }: any) => {
 
     const onThumbsUp = async (event: any) => {
         event.stopPropagation()
+        const { result } = await fetchUserLike(userId)
+
+        console.log(articleId)
+        console.log(result.articleList)
 
         // 判断该用户是否已经点过赞
         if (isThumbsUp) {
-            const code = await modifyArticle(articleId, {
+            const code1 = await modifyArticle(articleId, {
                 likes: [...likes.filter((item: ILike) => item.userId !== userId)],
             })
 
-            if (code === 0) {
+            const code2 = await modifyUserLike(
+                result._id,
+                result.articleList.filter((item: string) => item !== articleId)
+            )
+
+            if (code1 === 0 && code2 === 0) {
                 setLikeCount(likeCount - 1)
                 setIsThumbsUp(false)
             }
         } else {
-            const code = await modifyArticle(articleId, {
+            const code1 = await modifyArticle(articleId, {
                 likes: [{ userId, date: JSON.stringify(new Date()) }],
             })
 
-            if (code === 0) {
+            const code2 = await modifyUserLike(result._id, [...result.articleList, articleId])
+
+            if (code1 === 0 && code2 === 0) {
                 setLikeCount(likeCount + 1)
                 setIsThumbsUp(true)
             }
