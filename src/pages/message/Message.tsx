@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import ChatItem from '../../component/ChatItem'
 import Header from '../../component/Header'
+import { useAppSelector } from '../../hooks'
 import { fetchContactList } from '../../network/message'
-import { bodyOverflowHidden, bodyOverflowVisible } from '../../utils/common'
+import { userSelector } from '../../redux/reducers/userSlice'
+import { bodyOverflowHidden, bodyOverflowVisible, goToPage } from '../../utils/common'
 import ChatRoom from './ChatRoom'
 
 const initContactList = [
@@ -20,7 +23,9 @@ const Message = () => {
     const [isShow, setIsShow] = useState(false)
     const [contactList, setContactList] = useState(initContactList)
     const [contactUserId, setContactUserId] = useState('')
-    const userId = localStorage.getItem('userId') as string
+    const { userId } = useAppSelector(userSelector)
+    const history = useHistory()
+
 
     const onShowChatRoom = (userId: string) => {
         setIsShow(true)
@@ -46,10 +51,10 @@ const Message = () => {
         <div className="bg-gray-100">
             <Header />
             <div className="w-full h-20 flex justify-around items-center mb-2 bg-white">
-                <div>通知</div>
-                <div>赞</div>
-                <div>回复</div>
-                <div>关注</div>
+                <div onClick={() => goToPage('/notification', history)}>通知</div>
+                <div onClick={() => goToPage('/thumbsup-record', history)}>赞</div>
+                <div onClick={() => goToPage('/reply-record', history)}>回复</div>
+                <div onClick={() => goToPage('/follow-record', history)}>关注</div>
             </div>
             <div className="bg-white">
                 {contactList.map((item: any, index: number) => (

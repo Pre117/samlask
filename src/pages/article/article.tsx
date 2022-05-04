@@ -6,6 +6,7 @@ import Header from '../../component/Header'
 import ThumbsUpButton from '../../component/ThumbsUpButtom'
 import { useAppSelector } from '../../hooks'
 import '../../iconfont/interaction.css'
+import { IFollow } from '../../model/user'
 import { fetchSingleArticle, modifyArticle } from '../../network/article'
 import {
     fetchUserCollector,
@@ -144,25 +145,29 @@ const Article = () => {
             // 修改本用户关注列表
             const code1 = await modifyUserInfo(userInfo._id, {
                 following: userInfo.following.filter(
-                    (item: string) => item !== articleUserInfo.userId
+                    (item: IFollow) => item.userId !== articleUserInfo.userId
                 ),
             })
             // 修改文章作者关注者列表
             const code2 = await modifyUserInfo(articleUserInfo.userInfoId, {
-                followers: articleUserInfo.followers.filter((item: string) => item !== userId),
+                followers: articleUserInfo.followers.filter(
+                    (item: IFollow) => item.userId !== userId
+                ),
             })
 
             if (code1 === 0 && code2 === 0) {
                 setIsFollow(false)
             }
         } else {
+            const date = new Date().toLocaleString()
+
             // 修改本用户关注列表
             const code1 = await modifyUserInfo(userInfo._id, {
-                following: [...userInfo.following, articleUserInfo.userId],
+                following: [...userInfo.following, { userId: articleUserInfo.userId, date }],
             })
             // 修改文章作者关注者列表
             const code2 = await modifyUserInfo(articleUserInfo.userInfoId, {
-                followers: [...articleUserInfo.followers, userId],
+                followers: [...articleUserInfo.followers, { userId, date }],
             })
 
             if (code1 === 0 && code2 === 0) {
@@ -184,7 +189,7 @@ const Article = () => {
     }, [articleInfo])
 
     useEffect(() => {
-        setIsFollow(articleUserInfo.followers.includes(userId))
+        setIsFollow(articleUserInfo.followers.find((item) => item.userId === userId) ? true : false)
     }, [articleUserInfo, articleInfo])
 
     return (
@@ -207,7 +212,11 @@ const Article = () => {
                     ) : (
                         <div
                             onClick={onFollow}
-                            className={`w-20 h-10 ${isFollow ? 'bg-gray-100 border-gray-300 text-gray-500' : 'bg-green-100 border-green-500 text-green-500' } border rounded text-sm flex justify-center items-center`}
+                            className={`w-20 h-10 ${
+                                isFollow
+                                    ? 'bg-gray-100 border-gray-300 text-gray-500'
+                                    : 'bg-green-100 border-green-500 text-green-500'
+                            } border rounded text-sm flex justify-center items-center`}
                         >
                             {isFollow ? '已关注' : '关注'}
                         </div>
@@ -334,8 +343,8 @@ const initialArticleUserInfo = {
     username: '',
     avatar: avatar,
     points: 0,
-    following: [''],
-    followers: [''],
+    following: [{ userId: '', date: '' }],
+    followers: [{ userId: '', date: '' }],
 }
 
 const initialUserCollectorInfo = {

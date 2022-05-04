@@ -1,6 +1,9 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import { useAppSelector } from '../hooks'
 import '../iconfont/NavButtonIcon.css'
+import { fetchUserInfo } from '../network/user'
+import { userSelector } from '../redux/reducers/userSlice'
 import { bodyOverflowHidden, bodyOverflowVisible, goToPage } from '../utils/common'
 import DropDownMenu from './DropDownMenu'
 import LoginPop from './Pop/LoginPop'
@@ -10,7 +13,9 @@ const Header = () => {
     const [showDropMenu, setShowDropMenu] = useState(false)
     const [isLogin, setIsLogin] = useState(localStorage.getItem('token') ? true : false)
     const [scrollTop, setScrollTop] = useState(0)
+    const [avatar, setAvatar] = useState('')
     const history = useHistory()
+    const { userId } = useAppSelector(userSelector)
 
     // 打开弹窗
     const onPop = () => {
@@ -33,6 +38,16 @@ const Header = () => {
         setIsLogin(true)
     }, [])
 
+    const getUserInfo = async () => {
+        const { avatar } = await fetchUserInfo(userId)
+        
+        setAvatar(avatar)
+    }
+
+    useEffect(() => {
+        getUserInfo()
+    }, [])
+
     return (
         <div>
             <div className="fixed top-0 w-full h-14 border-b shadow bg-white dark:bg-dark-head dark:text-gray-300 dark:border-dark-icon">
@@ -53,13 +68,15 @@ const Header = () => {
                         <div
                             style={{ display: isLogin ? 'block' : 'none' }}
                             onClick={() => goToPage('/message', history)}
-                            className="iconfont icon-xiaoxi mr-6"
+                            className="iconfont icon-xiaoxi mr-6 self-center"
                         />
                         <div
                             style={{ display: isLogin ? 'block' : 'none' }}
                             onClick={() => setShowDropMenu(showDropMenu ? false : true)}
-                            className="iconfont icon-wode mr-4 w-8 h-8 border rounded-full text-center bg-gray-300 dark:bg-dark-head"
-                        />
+                            className="mr-4 w-8 h-8 rounded-full"
+                        >
+                            <img className='rounded-full' src={avatar} />
+                        </div>
                         <div
                             style={{ display: isLogin ? 'none' : 'block' }}
                             onClick={onPop}
