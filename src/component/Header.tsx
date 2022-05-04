@@ -39,14 +39,17 @@ const Header = () => {
     }, [])
 
     const getUserInfo = async () => {
-        const { avatar } = await fetchUserInfo(userId)
-        
-        setAvatar(avatar)
+        console.log(userId)
+        if (userId) {
+            const { avatar } = await fetchUserInfo(userId)
+
+            setAvatar(avatar)
+        }
     }
 
     useEffect(() => {
         getUserInfo()
-    }, [])
+    }, [userId])
 
     return (
         <div>
@@ -75,7 +78,7 @@ const Header = () => {
                             onClick={() => setShowDropMenu(showDropMenu ? false : true)}
                             className="mr-4 w-8 h-8 rounded-full"
                         >
-                            <img className='rounded-full' src={avatar} />
+                            <img className="rounded-full" src={avatar} />
                         </div>
                         <div
                             style={{ display: isLogin ? 'none' : 'block' }}

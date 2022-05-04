@@ -57,14 +57,14 @@ const Message = () => {
                 <div onClick={() => goToPage('/follow-record', history)}>关注</div>
             </div>
             <div className="bg-white">
-                {contactList.map((item: any, index: number) => (
+                { contactList.length !== 0 ? contactList.map((item: any, index: number) => (
                     <ChatItem
                         key={index}
                         userId={item.userId}
                         lastMessageInfo={item.lastMessageInfo}
                         onOpenChatRoom={onShowChatRoom}
                     />
-                ))}
+                )) : (<div className='pt-10 text-center'>暂无联系人</div>)}
             </div>
             <ChatRoom isShow={isShow} contactUserId={contactUserId} onCancelChatRoom={onCancelChatRoom} />
         </div>

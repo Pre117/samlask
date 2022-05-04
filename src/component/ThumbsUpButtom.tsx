@@ -33,7 +33,7 @@ const ThumbsUpButton = ({ likes, articleId, isHomePage = true }: any) => {
 
             const code2 = await modifyUserLike(
                 result._id,
-                result.articleList.filter((item: string) => item !== articleId)
+                result.articleList.filter((item: any) => item.articleId !== articleId)
             )
 
             if (code1 === 0 && code2 === 0) {
@@ -41,11 +41,13 @@ const ThumbsUpButton = ({ likes, articleId, isHomePage = true }: any) => {
                 setIsThumbsUp(false)
             }
         } else {
+            const date = new Date().toLocaleString().replace(/\//g, '-')
+
             const code1 = await modifyArticle(articleId, {
-                likes: [{ userId, date: JSON.stringify(new Date()) }],
+                likes: [{ userId, date }],
             })
 
-            const code2 = await modifyUserLike(result._id, [...result.articleList, articleId])
+            const code2 = await modifyUserLike(result._id, [...result.articleList, { articleId, date }])
 
             if (code1 === 0 && code2 === 0) {
                 setLikeCount(likeCount + 1)
