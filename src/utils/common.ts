@@ -66,3 +66,17 @@ export const timeFormat = (time: string) => {
 
     return `${res}前`
 }
+// 本地时间格式处理
+export const locareTimeFormat = (localeTime: string) => {
+    const arr = localeTime.split(' ')
+
+    if (arr.length === 1) return ''
+    const date = arr[0].split('/')
+    const time = arr[1].split(':')
+
+    return `${date[0]}年${date[1].length === 1 ? '0' : ''}${date[1]}月${
+        date[2].length === 1 ? '0' : ''
+    }${date[2]}日 ${time[0].length === 1 ? '0' : ''}${time[0]}:${time[1].length === 1 ? '0' : ''}${
+        time[1]
+    }`
+}

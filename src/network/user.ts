@@ -1,4 +1,5 @@
-import { nAxios } from './index'
+import { IUserInfo } from './../model/user';
+import { nAxios } from './index';
 
 export const userLogin = async (phoneNumber: string, password: string) => {
     const { data } = await nAxios.post('/user/login', { phoneNumber, password })
@@ -17,6 +18,17 @@ export const fetchUserInfo = async (userId: string) => {
     } = await nAxios.post('/user-info/find', { userId })
 
     return result
+}
+/**
+ * 修改用户信息
+ * @param userInfoId 用户信息Id
+ * @param userInfo 要修改的用户信息
+ * @returns 修改结果状态码
+ */
+export const modifyUserInfo = async (userInfoId: string, userInfo: IUserInfo) => {
+    const { data: { code } } = await nAxios.post('/user-info/update', { userInfoId, userInfo })
+
+    return code
 }
 /**
  * 获取用户点赞信息
